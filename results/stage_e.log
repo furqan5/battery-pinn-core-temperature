@@ -1,19 +1,6 @@
 ﻿====================================================================================================
 STAGE E -- inverse PINN, DATASET 2, SURFACE ONLY, 6 seeds
 ====================================================================================================
-  h = 37.0678 W/m2/K, k = 0.390843 W/m/K  (Stage B [B2] on DS1 SURFACE ONLY)
-  Bi = 1.2234   Bi/2 = 0.6117
+  h = 37.0607 W/m2/K, k = 0.393747 W/m/K  (Stage B [B2] on DS1 SURFACE ONLY)
+  Bi = 1.2142   Bi/2 = 0.6071
   measured core-surf max on DS2 = 6.5426 K
-python : C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn\stage_e_inverse.py:123: UserWarning: Converting a tensor 
-with requires_grad=True to a scalar may lead to unexpected behavior.
-At line:1 char:369
-+ ... qan's Docs\battery_pinn"; python -u stage_e_inverse.py 6 2>&1 | Tee-O ...
-+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (C:\Users\Nouman...ected behavior.:String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 
-Consider using tensor.detach() first. (Triggered internally at 
-C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:823.)
-  R_eff = float(torch.exp(logR))
-    seed 0: 506 s, 558 closures, R_eff 13.1000 mOhm, surf 0.1958 K
-    seed 1: 450 s, 573 closures, R_eff 13.0801 mOhm, surf 0.1931 K

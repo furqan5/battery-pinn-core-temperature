@@ -1,4 +1,4 @@
-"""Stage G diagnostic -- how much physics is the PINN actually enforcing?
+﻿"""Stage G diagnostic -- how much physics is the PINN actually enforcing?
 
 The finite-volume solver satisfies the PDE exactly by construction, so its
 surface RMSE is the best achievable WITHIN the model class.  If the PINN fits
@@ -19,7 +19,7 @@ from stage_e_inverse import H_FIXED, K_FIXED
 
 rec = Record("2")
 fv = RadialFV(N=40)
-T0 = 0.5 * (rec.T_s[0] + rec.T_c[0])
+T0 = float(rec.T_s[0])   # surface only: no core leak
 grad = rec.T_c - rec.T_s
 
 print("=" * 98)

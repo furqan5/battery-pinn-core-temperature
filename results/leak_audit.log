@@ -1,0 +1,27 @@
+﻿================================================================================================
+LEAK AUDIT
+================================================================================================
+
+  DATASET 1
+    T_s(0) = 8.1258 C, T_c(0) = 8.2419 C, core-surf at t=0 = +0.1161 K
+    leaky T0 = 8.1838 C   clean T0 = 8.1258 C   difference +0.0581 K
+      leaky (uses T_c[0])    R_eff 13.5956 mOhm  surf 0.5698 K  CORE 1.0390 K
+      clean (surface only)   R_eff 13.5999 mOhm  surf 0.5761 K  CORE 1.0493 K
+
+  DATASET 2
+    T_s(0) = 8.1987 C, T_c(0) = 8.2458 C, core-surf at t=0 = +0.0471 K
+    leaky T0 = 8.2222 C   clean T0 = 8.1987 C   difference +0.0236 K
+      leaky (uses T_c[0])    R_eff 14.3040 mOhm  surf 0.4637 K  CORE 0.8895 K
+      clean (surface only)   R_eff 14.3072 mOhm  surf 0.4668 K  CORE 0.8950 K
+
+  Every other input is core-blind and was re-checked line by line:
+    h, k        Stage B [B2], fitted to DS1 SURFACE only, different record
+    R_eff       fitted to DS2 SURFACE only
+    dT_ref      T_s.max() - T_inf.mean()          surface + ambient
+    T_inf       measured ambient channel
+    I, V        measured electrical channels
+    selection   PDE + BC residual on a fixed collocation set, no data, no truth
+    seed choice lowest residual, NOT lowest core error
+
+  VERDICT: the only core-channel contact was T0. Magnitude quantified above.
+           Stage E is re-run with the clean IC and the headline uses that.

@@ -1,4 +1,4 @@
-"""Stage B -- classical baseline fitted to the SURFACE trace only.
+﻿"""Stage B -- classical baseline fitted to the SURFACE trace only.
 
 Purpose (per the project's hard-won lesson): the classical fitter is the
 instrument that detects PINN bugs.  Comparing the PINN's recovered source
@@ -104,7 +104,7 @@ if __name__ == "__main__":
         rec = Record(tag)
         # Initial condition: the cell is essentially isothermal at t=0 but it is
         # NOT at ambient.  Using ambient here is the classic silent error (5.2).
-        T0 = 0.5 * (rec.T_s[0] + rec.T_c[0])
+        T0 = float(rec.T_s[0])   # surface only: no core leak
 
         print("=" * 94)
         print(f"DATASET {tag}   n={len(rec.t)}  duration={rec.t[-1]:.0f} s")

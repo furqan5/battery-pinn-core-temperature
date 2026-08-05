@@ -1,4 +1,4 @@
-"""Stage D (second attempt) -- forward gate using the base-subtracted formulation.
+﻿"""Stage D (second attempt) -- forward gate using the base-subtracted formulation.
 
 The first attempt (stage_d_forward.py, full-field PINN with Fourier features)
 FAILED at 39.2% core-surface error.  Two causes, both now measured rather than
@@ -35,7 +35,7 @@ def run_forward_split(rec, R_eff, k=P.k_t, h=P.h_lit, rho_cp=None, shape=(),
     t_ref = float(rec.t[-1])
     Fo = (k / rho_cp) * t_ref / P.R_o ** 2
     Bi = h * P.R_o / k
-    T0 = 0.5 * (rec.T_s[0] + rec.T_c[0])
+    T0 = float(rec.T_s[0])   # surface only: no core leak
     dT_ref = float(rec.T_s.max() - rec.T_inf.mean())
 
     base = LumpedBase(rec, h, rho_cp, P.R_o, P.V_b, T0, n_shape=len(shape))
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     for tag in ("2", "1"):
         rec = Record(tag)
-        T0 = 0.5 * (rec.T_s[0] + rec.T_c[0])
+        T0 = float(rec.T_s[0])   # surface only: no core leak
         q = (rec.I ** 2) * R_EFF / P.V_b
         ref = fv.solve(rec.t, q, rec.T_inf, T0, k=P.k_t, h=P.h_lit,
                        rho_cp=P.rho_cp())

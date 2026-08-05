@@ -1,4 +1,4 @@
-"""Stage C -- Cramer-Rao identifiability analysis, BEFORE any inverse fit.
+﻿"""Stage C -- Cramer-Rao identifiability analysis, BEFORE any inverse fit.
 
 Rule for this project: if a parameter set is not identifiable, do not fit it.
 A fit that looks fine and means nothing is the failure mode this whole exercise
@@ -137,7 +137,7 @@ if __name__ == "__main__":
 
     for tag in ("1", "2"):
         rec = Record(tag)
-        T0 = 0.5 * (rec.T_s[0] + rec.T_c[0])
+        T0 = float(rec.T_s[0])   # surface only: no core leak
         sig_raw = estimate_sigma(raw_surface(tag))
         sig_interp = estimate_sigma(rec.T_s)
         sigma = SIGMA_MODEL[tag]

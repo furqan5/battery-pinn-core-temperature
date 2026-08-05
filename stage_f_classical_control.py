@@ -1,4 +1,4 @@
-"""Like-for-like classical control for the PINN's core prediction (trap 5.8).
+﻿"""Like-for-like classical control for the PINN's core prediction (trap 5.8).
 
 The PINN must be compared against a baseline solving the SAME problem with the
 SAME information: surface trace only, h and k fixed from DS1's surface-only fit,
@@ -15,7 +15,7 @@ from stage_e_inverse import H_FIXED, K_FIXED
 
 rec = Record("2")
 fv = RadialFV(N=40)
-T0 = 0.5 * (rec.T_s[0] + rec.T_c[0])
+T0 = float(rec.T_s[0])   # surface only: no core leak
 grad = rec.T_c - rec.T_s
 
 

@@ -31,8 +31,12 @@ from pinn_split import (LumpedBase, DeviationNet, split_pde_residual,
 
 torch.set_num_threads(6)
 
-H_FIXED = 37.0678         # Stage B [B2] on DS1, surface only
-K_FIXED = 0.390843        # Stage B [B2] on DS1, surface only
+# Stage B [B2] fitted to DS1's SURFACE trace only, with the surface-only initial
+# condition (an earlier version used 0.5*(T_s[0]+T_c[0]), which read the core at
+# t=0; see stage_g_leak_audit.py).  Re-derived clean, these moved by 0.02% and
+# 0.74% respectively -- small, but the headline uses the clean values.
+H_FIXED = 37.0607         # W/m^2/K
+K_FIXED = 0.393747        # W/m/K
 
 
 def run_inverse(rec, h=H_FIXED, k=K_FIXED, rho_cp=None, n_shape=0, seed=0,
@@ -46,7 +50,13 @@ def run_inverse(rec, h=H_FIXED, k=K_FIXED, rho_cp=None, n_shape=0, seed=0,
     t_ref = float(rec.t[-1])
     Fo = (k / rho_cp) * t_ref / P.R_o ** 2
     Bi = h * P.R_o / k
-    T0 = 0.5 * (rec.T_s[0] + rec.T_c[0])
+    # Initial condition from the SURFACE ONLY.  An earlier version used
+    # 0.5*(T_s[0] + T_c[0]), which reads the measured core at t=0 -- a real, if
+    # tiny, leak.  Quantified in stage_g_leak_audit.py: it moved the classical
+    # core RMSE by 0.6% (0.8895 -> 0.8950 K) and R_eff by 0.02%.  Small is not
+    # absent, so it is gone.  The cell is near-isothermal at t=0 anyway
+    # (core-surface = 0.047 K on DS2), so a uniform T_s[0] is physically sound.
+    T0 = float(rec.T_s[0])
     dT_ref = float(rec.T_s.max() - rec.T_inf.mean())
 
     base = LumpedBase(rec, h, rho_cp, P.R_o, P.V_b, T0, n_shape=n_shape)

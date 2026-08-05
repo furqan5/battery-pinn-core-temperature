@@ -1,4 +1,4 @@
-"""Stage G diagnostic -- does the soft PDE constraint distort the recovered R_eff?
+﻿"""Stage G diagnostic -- does the soft PDE constraint distort the recovered R_eff?
 
 Seed 0 of Stage E fitted the surface to 0.196 K, better than the exact
 finite-volume solver's best-possible 0.464 K.  The FV solution satisfies the PDE
@@ -24,7 +24,7 @@ torch.set_num_threads(6)
 
 rec = Record("2")
 fv = RadialFV(N=40)
-T0 = 0.5 * (rec.T_s[0] + rec.T_c[0])
+T0 = float(rec.T_s[0])   # surface only: no core leak
 grad = rec.T_c - rec.T_s
 
 print("=" * 104)

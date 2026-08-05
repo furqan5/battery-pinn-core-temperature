@@ -501,12 +501,65 @@ single record cannot tell the difference. It is the first thing the next experim
 md(r"""
 ## Stage G — honesty pass
 
-The scored prediction table, the seed spread, the non-convergence rate, and a plain statement of
-what is and is not established are all in `FINDINGS.md`, generated below so the numbers cannot
-drift from the run.
+### Is the PINN actually enforcing its own physics?
+
+The finite-volume solver satisfies the PDE exactly by construction, so **its** surface RMSE is
+the best achievable *within the physics*. If the PINN fits the surface better than that, it is
+not being cleverer — it is spending PDE residual to buy data fit, because the constraint is soft.
+
+That matters here specifically: a network that bends the physics to fit the surface has no reason
+to extrapolate correctly to the core, which is the one thing we are asking of it. The test below
+takes the PINN's own recovered `R_eff`, pushes it through the exact solver, and reports the
+divergence in kelvin.
 """)
 
 code(r"""
+print(subprocess.run([sys.executable, "stage_g_consistency.py"],
+                     capture_output=True, text=True).stdout)
+""")
+
+md(r"""
+### Does the data weight distort the recovered parameter?
+
+Two independent anchors on the true `R_eff`: the classical fit with physics enforced exactly
+(14.30 mΩ) and the electrical regression of V on I (14.49 mΩ). If the PINN's estimate drifts away
+from those as the data weight rises, the soft constraint is biasing it.
+
+**Note on selection.** If a weighting is preferred on the basis of this sweep, it is chosen on
+*physics consistency* — PDE residual and agreement with the electrical anchor — both of which are
+**core-blind**. Choosing a weighting because it improves the core error would be test-set
+selection, and it would invalidate the headline.
+""")
+
+code(r"""
+print(subprocess.run([sys.executable, "stage_g_weight_sweep.py"],
+                     capture_output=True, text=True).stdout)
+""")
+
+md(r"""
+### Verification suites
+
+Both discretisations are checked against closed-form solutions before anything depends on them.
+""")
+
+code(r"""
+for suite in ("tests_fd.py", "tests_split.py"):
+    out = subprocess.run([sys.executable, suite], capture_output=True, text=True).stdout
+    print(f"--- {suite} ---")
+    print(out.strip().split("\n")[-2])
+""")
+
+md(r"""
+### The written record
+
+The scored prediction table, seed spread, non-convergence rate, and a plain statement of what is
+and is not established are in `FINDINGS.md`, generated from the saved results so no number is
+retyped by hand.
+""")
+
+code(r"""
+import subprocess, sys
+subprocess.run([sys.executable, "make_findings.py"], check=True)
 print(open("FINDINGS.md", encoding="utf-8").read())
 """)
 
