@@ -1,0 +1,14 @@
+# Raw datasets: large binaries, redistributed under their own licences.
+# They live on disk beside the repo but are not tracked.
+Data_Sets/
+
+# Prior-work package (read-only reference, tracked separately)
+CoreField_Battery_Package_v1.0/
+
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Regenerable outputs
+figures/*.png
+results/*.npz
