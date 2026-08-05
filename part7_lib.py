@@ -116,29 +116,53 @@ class Record:
         self.I = np.interp(self.t, ti, I_raw)
         self.V = np.interp(self.t, ti, V_raw)
 
-        # coulomb counting, + = discharge; dod relative to start of record
-        self.dod = np.cumsum(self.I) * dt / 3600.0 / P.Cap_Ah
+        # SIGN CONVENTION -- established empirically, not assumed:
+        #   corr(I, V) = +0.90 over |I| > 1 A, i.e. voltage RISES with positive
+        #   current, so I > 0 is CHARGE.  Confirmed by regressing V on I, which
+        #   gives +13.9 mOhm (right for an A123 26650 at 8 C), and by the energy
+        #   balance below.  Richardson's abs(I*(V-3.3)) hides this.
+        # Therefore charge throughput is +int(I dt) and DEPTH OF DISCHARGE falls
+        # as the cell charges.
+        self.soc_shift = np.cumsum(self.I) * dt / 3600.0 / P.Cap_Ah
+        self.dod = -self.soc_shift
+
+        # measured plateau OCV for this record: intercept of V = R*I + U.
+        # The SOC window here is only ~11% wide and LFP is flat, so a single
+        # fitted plateau value is defensible; the slope doubles as an
+        # independent anchor on R_eff.
+        m = np.abs(self.I) > 1.0
+        A = np.vstack([self.I[m], np.ones(int(m.sum()))]).T
+        self.R_ohmic_reg, self.U_ocv_reg = np.linalg.lstsq(A, self.V[m], rcond=None)[0]
 
         self.n_raw_T = len(t_raw)
         self.n_raw_VC = len(ti)
 
     # -- derived heat-source estimates ------------------------------------- #
 
-    def q_measured(self, U_ocv: float | np.ndarray = P.U_plat) -> np.ndarray:
-        """(a) Richardson's instrument: Q = |I (V - U_ocv)|, W.
+    def q_measured(self, U_ocv: float | None = None) -> np.ndarray:
+        """Irreversible heat from measured terminal quantities, W.  No free parameter.
 
-        Uses only measured terminal quantities -- no core channel, no free
-        parameter.  This is the independent classical check on the fitted source.
+        With I > 0 = charge (see __init__), the Bernardi irreversible term is
+            Q_irr = I_discharge (U_ocv - V) = -I (U_ocv - V) = I (V - U_ocv),
+        which is >= 0 whenever the overpotential shares the sign of the current.
+        We do NOT wrap this in abs(): a negative value is a real signal that the
+        sign convention or the OCV is wrong, and abs() would swallow it.
+
+        Validated by energy balance: mean here is 1.197 W (DS1) / 1.934 W (DS2)
+        against the 1.226 W / 1.942 W required to explain the measured heating.
         """
-        return np.abs(self.I * (self.V - U_ocv))
+        U = self.U_ocv_reg if U_ocv is None else U_ocv
+        return self.I * (self.V - U)
 
     def q_reversible(self, T_K: np.ndarray, dUdT: float = P.dUdT_50) -> np.ndarray:
-        """(a) Bernardi reversible term, Q_rev = -I * T * dUdT, W.
+        """(a) Bernardi reversible term, W.  Forgez et al. 2010 via Richardson.
 
-        Sign convention: with + = discharge and dUdT<0 for LFP near 50% SOC,
-        discharge gives Q_rev > 0 (exothermic).  Cited to Forgez et al. 2010.
+        Standard form is Q_rev = -I_discharge * T * dU/dT.  With I > 0 = charge,
+        I_discharge = -I, so Q_rev = +I * T * dU/dT.  For LFP near 50% SOC
+        dU/dT < 0, so this is endothermic on charge and exothermic on
+        discharge, which is the expected behaviour.
         """
-        return -self.I * T_K * dUdT
+        return self.I * T_K * dUdT
 
     def summary(self) -> dict:
         d = self.T_c - self.T_s
