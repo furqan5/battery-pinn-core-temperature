@@ -1,0 +1,35 @@
+﻿================================================================================================
+CLASSICAL SURFACE RESIDUAL -- anatomy
+================================================================================================
+  rms 0.4597 K, mean -0.0709 K, range -1.350 to +0.875 K
+  thermocouple noise ~0.0097 K -> 100.0 % of the residual VARIANCE is model-form error, not measurement
+  residual autocorrelation falls to 1/e at lag 423 s -> strongly correlated, NOT white
+
+  Correlation of the residual against candidate drivers:
+    surface rise (T_s - T_inf)   r = +0.4092
+    instantaneous heat I^2       r = +0.1031
+    |current|                    r = +0.0630
+    ambient T_inf                r = -0.3268
+    time                         r = +0.5083   <-- strong
+    dT_s/dt                      r = -0.0050
+    measured core-surface        r = +0.3963
+
+  Interpretation guide:
+    correlation with SURFACE RISE  -> h is not constant (temperature- or
+                                      flow-dependent convection)
+    correlation with I^2           -> the source model is wrong in shape
+    correlation with dT_s/dt       -> a missing thermal mass, e.g. the can
+                                      or the thermocouple's own dynamics
+    correlation with TIME          -> a slow drift (ageing, flow change)
+
+  Test: let h vary linearly with surface rise, h = h0 (1 + g*(T_s - T_inf)).
+  This stays a CLASSICAL fit -- physics enforced exactly -- and uses only
+  surface and ambient data.
+           g       h0  R_eff mOhm  surf RMSE  CORE RMSE
+       0.000   37.061     14.3009     0.4652     0.8943
+       0.010   37.061     15.4257     0.3782     0.8120
+       0.020   37.061     16.5474     0.3244     0.9982
+       0.030   37.061     17.6655     0.3096     1.3374
+       0.050   37.061     19.8892     0.3764     2.1601
+  (g is scanned to DIAGNOSE, not selected on the core -- the headline keeps
+   constant h.)

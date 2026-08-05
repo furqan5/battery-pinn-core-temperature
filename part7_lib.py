@@ -262,8 +262,23 @@ class RadialFV:
 
     # -- solve -------------------------------------------------------------- #
 
+    def radial_weight(self, beta):
+        """Volume-normalised radial generation profile w(r) with mean 1.
+
+        w(r) = 1 + beta*(1 - 2 (r/R)^2), chosen because its volume average is
+        exactly 1 for any beta, so changing beta redistributes heat WITHOUT
+        changing the total.  beta > 0 concentrates generation toward the axis.
+
+        Used only as a DIAGNOSTIC to test whether non-uniform generation
+        explains the inverse PINN's behaviour.  It is not part of the headline
+        model, which assumes uniform generation.
+        """
+        w = 1.0 + beta * (1.0 - 2.0 * (self.r / self.R) ** 2)
+        # enforce exact volume-mean of 1 against discretisation round-off
+        return w / ((w * self.vol).sum() / self.vol.sum())
+
     def solve(self, t, q_vol, T_inf, T0, k=P.k_t, h=P.h_lit,
-              rho_cp=None, return_field=False):
+              rho_cp=None, return_field=False, q_weight=None):
         """March the field forward.
 
         t        (n,)   uniform time grid, s
@@ -289,6 +304,9 @@ class RadialFV:
         Ts = np.empty(n)
         field = np.empty((n, N)) if return_field else None
 
+        # radial redistribution of the (unchanged) total generation
+        wq = np.ones(N) if q_weight is None else np.asarray(q_weight, float)
+
         q_vol = np.asarray(q_vol, float)
         T_inf = np.asarray(T_inf, float)
         if T_inf.ndim == 0:
@@ -303,7 +321,7 @@ class RadialFV:
             # Adding it to every cell (scalar broadcast) silently injects heat
             # everywhere and breaks the global energy balance -- error then grows
             # linearly with N, which is how this was caught.
-            rhs = cap * T + q_vol[i] * self.vol
+            rhs = cap * T + q_vol[i] * self.vol * wq
             rhs[-1] += self.G_out * T_inf[i]
             T = sla.solve_banded((1, 1), ab, rhs)
             Tc[i] = self._core(T)

@@ -4,3 +4,27 @@ STAGE E -- inverse PINN, DATASET 2, SURFACE ONLY, 6 seeds
   h = 37.0607 W/m2/K, k = 0.393747 W/m/K  (Stage B [B2] on DS1 SURFACE ONLY)
   Bi = 1.2142   Bi/2 = 0.6071
   measured core-surf max on DS2 = 6.5426 K
+    seed 0: 441 s, 571 closures, R_eff 13.0798 mOhm, surf 0.1960 K
+    seed 1: 465 s, 568 closures, R_eff 13.0742 mOhm, surf 0.1943 K
+    seed 2: 411 s, 582 closures, R_eff 13.1158 mOhm, surf 0.1953 K
+    seed 3: 246 s, 571 closures, R_eff 13.1081 mOhm, surf 0.1974 K
+    seed 4: 134 s, 566 closures, R_eff 13.0654 mOhm, surf 0.1965 K
+    seed 5: 139 s, 564 closures, R_eff 13.1294 mOhm, surf 0.1954 K
+
+  --- order 0: scalar R_eff ---
+    seed  R_eff mOhm              shape  surfRMSE   selection  clos |  CORE RMSE  coremax
+       0     13.0798                  -    0.1960   1.408e-01   571 |     0.6344   2.0204
+       1     13.0742                  -    0.1943   1.393e-01   568 |     0.6238   2.0208
+       2     13.1158                  -    0.1953   1.384e-01   582 |     0.6244   1.9793
+       3     13.1081                  -    0.1974   1.381e-01   571 |     0.6135   1.9093
+       4     13.0654                  -    0.1965   1.428e-01   566 |     0.6312   2.0660
+       5     13.1294                  -    0.1954   1.390e-01   564 |     0.6369   2.0537
+    R_eff : mean 13.0955 mOhm  sd 0.0258  spread 0.489 %
+    surf  : mean 0.1958 K  sd 0.0011
+    core  : mean 0.6274 K  sd 0.0086  min 0.6135  max 0.6369
+    non-convergence: 0.0 % (0/6)
+    SELECTED by lowest PDE+BC residual (truth-free): seed 3
+      -> core RMSE 0.6135 K, max 1.9093 K, surface RMSE 0.1974 K
+    (reference only, NOT used for selection: best-by-core is seed 3 at 0.6135 K)
+    seed 0: 159 s, 566 closures, R_eff 12.9726 mOhm, surf 0.1846 K
+    seed 1: 164 s, 568 closures, R_eff 12.9815 mOhm, surf 0.1846 K

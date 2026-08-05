@@ -1,0 +1,25 @@
+﻿====================================================================================================
+STAGE G -- is non-uniform generation the explanation?
+====================================================================================================
+  targets to explain:  PINN R_eff 13.096 mOhm, core RMSE 0.614 K
+  uniform classical :       R_eff 14.301 mOhm, core RMSE 0.894 K
+  electrical anchor :       R_eff 14.492 mOhm
+
+    beta  q(0)/q(R)  R_eff mOhm  surf RMSE  CORE RMSE  grad RMSE
+    0.00      1.000     14.3009     0.4652     0.8943     0.4697
+    0.10      1.215     14.3113     0.4780     0.8599     0.4073
+    0.20      1.482     14.3212     0.4934     0.9166     0.5343
+    0.30      1.818     14.3305     0.5110     1.0497     0.7613
+    0.40      2.258     14.3393     0.5307     1.2346     1.0239
+    0.50      2.858     14.3474     0.5522     1.4514     1.3009
+    0.60      3.722     14.3551     0.5754     1.6878     1.5846
+
+  Reading:
+    - If R_eff FALLS toward ~13.1 mOhm as beta rises while the surface fit
+      stays flat, then centre-weighted generation reproduces the PINN's
+      lower R_eff without any neural network being involved.
+    - If the core error also falls toward ~0.61 K, the same mechanism
+      explains the better core prediction.
+    - The surface RMSE barely moving across beta is the point: the surface
+      CANNOT see the radial distribution. That is why beta is not
+      identifiable from this data, and why it stays out of the headline.
