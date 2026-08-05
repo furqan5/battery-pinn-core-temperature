@@ -8,3 +8,9 @@ STAGE G -- recovered R_eff vs data weight (soft-constraint distortion test)
          5     13.3183     0.4827     1.015e-01     1.0500         1.3683           0.3377   [96 s]
         20     13.6164     0.3025     1.136e-01     0.7403         1.1695           0.4278   [91 s]
        200     13.0545     0.1963     1.436e-01     0.6332         1.5650           0.8285   [89 s]
+      2000     11.2573     0.1374     2.665e-01     0.7721         3.1037           1.8334   [92 s]
+
+  Reading: if R_eff drifts away from the ~14.3-14.5 mOhm anchors as w_data
+  rises, and surface RMSE drops below the 0.464 K physics floor, then the
+  network is buying data fit with PDE violation -- and the recovered
+  parameter is biased even though the fit looks excellent.

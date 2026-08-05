@@ -21,6 +21,15 @@ This is a negative result for the method and the most useful thing in the notebo
 The PINN still passes its pre-registered target (P5, < 1 K), and every reported number is
 leak-free. It is simply not the best tool for this problem, and saying so is the point.
 
+Two qualifications that belong next to the headline, not in a footnote:
+
+* **The PINN does not actually solve the PDE it claims to.** Its field departs from a true
+  solution by 0.80 K on the surface — more than its own core error — and its
+  recovered parameter, solved correctly, gives 1.52 K, worse than the classical
+  fit. See §5.5.
+* **Its P5 hit depends on a hyperparameter that truth-free selection gets wrong.** Choosing the
+  data weight by the lowest PDE residual would have given 1.05 K and missed P5. See §5.6.
+
 ---
 
 ## 1. Why the one-liner wins
@@ -183,6 +192,26 @@ the difference.
    DS1), so it is a property of the method rather than one record's quirk. But "reliably better
    by breaking the constraint" is a weaker claim than it first appears, and it does not survive
    comparison with the one-liner.
+
+6. **The P5 hit is fragile to a hyperparameter that truth-free selection gets WRONG.** Sweeping
+   the data weight (everything else fixed):
+
+   | w_data | R_eff | surface RMSE | PDE+BC residual | core RMSE | that R_eff in exact physics |
+   |---|---|---|---|---|---|
+   | 5 | 13.32 mΩ | 0.4827 K | **0.1015** | 1.0500 K | 1.3683 K |
+   | 20 | 13.62 mΩ | 0.3025 K | 0.1136 | 0.7403 K | 1.1695 K |
+   | **200 (used)** | 13.05 mΩ | 0.1963 K | 0.1436 | **0.6332 K** | 1.5650 K |
+   | 2000 | 11.26 mΩ | 0.1374 K | 0.2665 | 0.7721 K | 3.1037 K |
+
+   Every trend is monotonic: more data weight buys surface fit and pays in PDE residual, PDE
+   violation, and R_eff bias (down to 11.26 mΩ, 22 % below the anchors).
+
+   The uncomfortable part: **selecting w_data by the truth-free criterion this project mandates —
+   lowest PDE + BC residual — picks w_data = 5, which gives 1.05 K and MISSES P5.** The headline
+   used w_data = 200, fixed a priori in the first draft and never adjusted, which happens to sit
+   near the core-error minimum. That is luck, not method. Declared here rather than buried,
+   because a result that depends on an arbitrary hyperparameter the methodology cannot defend is
+   not as solid as its error bar suggests.
 6. **A plain full-field PINN does not work here at all** — it failed the forward gate at 39.2 %.
    Everything reported depends on the base-subtracted formulation.
 
