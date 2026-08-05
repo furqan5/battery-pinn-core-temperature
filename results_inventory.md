@@ -12,8 +12,8 @@ Not all numbers in this project stand on the same footing, and the thesis must n
 
 | Tier | Meaning | Applies to |
 |---|---|---|
-| **V1 — re-derived** | Recomputed from committed code + committed data during this inventory. Highest confidence. | All Part 7 results |
-| **V2 — re-executable, not re-executed** | Code and input data are both present in this repository; the numbers live in notebook prose because the cells carry no stored outputs. Could be verified in ~1 h. | Parts 3, 6 (NASA `B0005.mat` is present at `Data_Sets\Li-ion Battery Dataset from NASA PCoE\Battery_DataSet\Battery_DataSet\B0005.mat`) |
+| **V1 — re-derived** | Recomputed from committed code + committed data during this inventory. Highest confidence. | All Part 7 results; **Part 3 (re-executed 6 Aug 2026, see §3.0)** |
+| **V2 — re-executable, not re-executed** | Code and input data are both present in this repository; the numbers live in notebook prose because the cells carry no stored outputs. | Part 6 (re-execution in progress at time of writing) |
 | **V3 — self-contained, not re-executed** | Code present, inputs synthetic (generated in-notebook), no stored outputs. | Parts 2, 4, 5, 5b |
 | **V4 — external, unverifiable** | Referenced in project documents; code and raw output never available to this repository. | The Iontech LFP multi-C-rate run |
 
@@ -117,10 +117,42 @@ Truth-free selection (lowest PDE+BC residual) picks w_data = 5 → 1.05 K → **
 
 ---
 
-## 3. Part 3 — identifiability and classical inverse (tier V2)
+## 3. Part 3 — identifiability and classical inverse (tier V1, re-executed)
 
-The intellectual spine. `Part3_CRLB_Classical_Inverse.ipynb`; numbers in markdown cells 9, 10, 24,
-37, 38, 39.
+The intellectual spine. `Part3_CRLB_Classical_Inverse.ipynb`.
+
+### 3.0 Re-execution outcome — 6 Aug 2026
+
+Executed in this repository against the local NASA archive: **24/24 code cells, 0 errors, 109 s**
+(`verify/Part3_CRLB_Classical_Inverse_executed.ipynb`, `verify/run.log`). **Every transcribed
+value reproduced**, to the last quoted digit in all cases checked, including the CRLB table, the
+degeneracy eigenvector, the lumped-inverse bias, the profile likelihood, the final 168-cycle fit,
+and the EIS comparison. The chapter's numbers can now be cited as verified here, not merely
+reported.
+
+Three things the re-execution added that the prose did not state:
+
+1. **The 15.87 K / 14.3 K inconsistency is resolved.** Cell 36 prints, verbatim: *"relative figure
+   of merit: RMSE 0.228 K over a rise of 15.87 K = 1.44 %"*, and cell 17 gives "temperature rise
+   across cycles: median 15.87 K, min 13.74, max 17.31". **15.87 K is correct**; the "14.3 K, 1.6 %"
+   in the §4.10 prose is a transcription slip. Use 1.44 %.
+2. **The `.mat` mirror carries no `metadata.csv`**, so cell 18 prints "No metadata — cannot
+   stratify". The "B0005 @ 24 °C stratum" is therefore *all 168 discharge cycles in `B0005.mat`*,
+   not a subset selected on logged ambient. The label is nominal. This does not change any number
+   but it should be described accurately in the thesis. `[VERIFY: whether B0005 cycles are all at
+   24 °C nominal — the CSV mirror's metadata would settle it]`
+3. **The source-order limit is directly printed** (cell 29), which is stronger evidence than the
+   prose summary:
+
+| Model | scaled cond(F) | worst relative CRLB sd |
+|---|---|---|
+| order 1, h fixed | 2.412×10² | 1.63 % |
+| **order 2, h fixed** | **1.070×10⁴** | **7.48 %** |
+| order 3, h fixed | 6.136×10⁵ | 52.69 % |
+| order 4, h fixed | 3.269×10⁷ | 362.97 % |
+
+"Highest order supported with h fixed (cond < 1e5 and all sd < 25 %): **2**" — printed by the
+notebook, not asserted in prose.
 
 ### 3.1 CRLB, synthetic slab, σ = 0.10 K
 
@@ -188,9 +220,9 @@ figures — the smoothing is in the original NASA files, not the curation.
 
 Honest figure of merit: **0.228 K over a 15.87 K rise = 1.44 %**.
 
-> ⚠ **Internal inconsistency to resolve.** Cell 37 states "0.228 K over a 15.87 K rise = 1.44 %";
-> cell 38 states "0.228 K over a 14.3 K rise, 1.6 %". Same RMSE, two different rises and two
-> different percentages. `[VERIFY: which rise value is correct for the B0005 @ 24 °C stratum]`
+> ✅ **Resolved by re-execution.** The prose carried two versions ("15.87 K rise = 1.44 %" and
+> "14.3 K rise, 1.6 %"). The notebook prints 15.87 K, and cell 17 confirms it as the median rise
+> across the 168 cycles. **Quote 1.44 %.**
 
 ---
 
