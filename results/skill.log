@@ -1,0 +1,29 @@
+﻿============================================================================================
+STAGE G -- skill against trivial baselines
+============================================================================================
+  * B1 is handed the measured gradient's MEAN, so it is not core-blind.
+    It is included as a deliberately unfair, strong baseline.
+
+  DATASET 2   (measured gradient: mean 5.042 K, sd 1.210 K, max 6.543 K)
+    predictor                           core RMSE  grad RMSE  skill vs B1
+    inverse PINN (order 0)                 0.6135     0.6135        49.3 %
+    B0: T_core = T_surf                    5.1855     5.1855      -328.5 %
+    B1: T_surf + mean(grad)*               1.2101     1.2101         0.0 %
+    B2: T_surf + Bi/2*(Ts-Tinf)            0.1409     0.1409        88.4 %
+    variance of the gradient explained (R^2 vs its own mean): +0.743
+    corr(predicted grad, measured grad) = +0.9330
+    sd(predicted grad) = 1.372 K vs measured 1.210 K  -> the prediction is 113 % as variable
+
+  DATASET 1   (measured gradient: mean 3.623 K, sd 2.388 K, max 7.131 K)
+    predictor                           core RMSE  grad RMSE  skill vs B1
+    inverse PINN (order 0)                 0.5024     0.5024        79.0 %
+    B0: T_core = T_surf                    4.3391     4.3391       -81.7 %
+    B1: T_surf + mean(grad)*               2.3878     2.3878         0.0 %
+    B2: T_surf + Bi/2*(Ts-Tinf)            0.3366     0.3366        85.9 %
+    variance of the gradient explained (R^2 vs its own mean): +0.956
+    corr(predicted grad, measured grad) = +0.9882
+    sd(predicted grad) = 2.244 K vs measured 2.388 K  -> the prediction is 94 % as variable
+
+  Reading: a high core R^2 driven mostly by the gradient's MEAN LEVEL is a
+  much weaker claim than one driven by its DYNAMICS.  The honest statement
+  has to separate the two.

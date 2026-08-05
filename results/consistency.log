@@ -1,0 +1,19 @@
+﻿==================================================================================================
+STAGE G -- physics-consistency of the PINN solution
+==================================================================================================
+
+  --- shape order 0, selected seed 3, R_eff = 13.1081 mOhm ---
+                                  surf RMSE  core RMSE  grad RMSE
+    PINN solution                    0.1974     0.6135     0.5990
+    same R_eff through exact FV      0.8395     1.5238     0.7005
+    PINN vs exact FV at the SAME R_eff: surface 0.8029 K, core 1.0570 K
+    -> that difference IS the PDE violation, expressed in kelvin.
+    plausibility (trap 5.7): ratio 0.5837 vs Bi/2 0.6071 -> factor 0.962 (PASS)
+
+  --- shape order 1, selected seed 3, R_eff = 13.0576 mOhm ---
+                                  surf RMSE  core RMSE  grad RMSE
+    PINN solution                    0.1815     0.5710     0.5403
+    same R_eff through exact FV      0.8643     1.5625     0.7141
+    PINN vs exact FV at the SAME R_eff: surface 0.8327 K, core 1.2153 K
+    -> that difference IS the PDE violation, expressed in kelvin.
+    plausibility (trap 5.7): ratio 0.5880 vs Bi/2 0.6071 -> factor 0.969 (PASS)

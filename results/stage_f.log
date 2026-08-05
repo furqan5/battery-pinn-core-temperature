@@ -1,0 +1,24 @@
+﻿========================================================================================================
+STAGE F -- PREDICTED CORE vs MEASURED CORE  (dataset 2, surface-only fit)
+========================================================================================================
+  measured core-minus-surface: max 6.5426 K, rms 5.1855 K, mean 5.0423 K
+
+  model                          R_eff  surfRMSE  CORE RMSE  core max     bias  % of max grad  core/surf
+  ------------------------------------------------------------------------------------------------------
+  order 0 (seed 3)             13.108m    0.1974     0.6135    1.9093  -0.3577          9.38%       3.11
+  order 1 (seed 3)             13.058m    0.1815     0.5710    1.4981  -0.2976          8.73%       3.15
+
+  order 0: P5 (core RMSE < 1 K) -> HIT   P6 (core err >= 2x surface err) -> HIT (ratio 3.11)
+  order 1: P5 (core RMSE < 1 K) -> HIT   P6 (core err >= 2x surface err) -> HIT (ratio 3.15)
+
+  Error is NOT uniform in time -- decomposition of the order-0 result:
+    first 10 min (start-up transient)  RMSE 1.1146 K   max 1.9093 K   bias -0.9973 K
+    10-20 min                          RMSE 0.5533 K   max 1.2363 K   bias -0.4226 K
+    after the first 10 min             RMSE 0.4471 K   max 1.2363 K   bias -0.2273 K
+    whole record                       RMSE 0.6136 K   max 1.9093 K   bias -0.3577 K
+    -> the first 10 min is 17 % of the record but 56 % of the squared error.
+    Physically reasonable: the start-up transient has the sharpest radial
+    gradients and the model assumes a perfectly uniform initial field.
+  wrote figures/core_validation.png
+  wrote figures/gradient_validation.png
+  gradient RMSE 0.5990 K (11.55 % of rms gradient)

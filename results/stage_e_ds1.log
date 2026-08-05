@@ -1,0 +1,43 @@
+﻿====================================================================================================
+REPLICATION -- inverse PINN on DATASET 1, surface only, 6 seeds
+====================================================================================================
+  h = 37.2846 W/m2/K, k = 0.418697 W/m/K  (Stage B [B2] on DS2 SURFACE ONLY)
+  Bi = 1.1487
+  measured core-surface max on DS1 = 7.1314 K
+
+  CLASSICAL control: R_eff 13.6493 mOhm, surface 0.5613 K, CORE 1.0544 K
+  electrical anchor on DS1: 13.872 mOhm
+    seed 0: 165 s, 536 closures, R_eff 13.1448 mOhm, surface 0.1208 K
+    seed 1: 168 s, 538 closures, R_eff 13.2230 mOhm, surface 0.1234 K
+    seed 2: 165 s, 529 closures, R_eff 13.2651 mOhm, surface 0.1238 K
+    seed 3: 160 s, 534 closures, R_eff 13.1215 mOhm, surface 0.1246 K
+    seed 4: 165 s, 544 closures, R_eff 13.1983 mOhm, surface 0.1265 K
+    seed 5: 158 s, 531 closures, R_eff 13.1742 mOhm, surface 0.1244 K
+
+  --- DS1 replication, order 0 ---
+    seed  R_eff mOhm              shape  surfRMSE   selection  clos |  CORE RMSE  coremax
+       0     13.1448                  -    0.1208   3.177e-02   536 |     0.5344   1.3425
+       1     13.2230                  -    0.1234   2.983e-02   538 |     0.5224   1.2932
+       2     13.2651                  -    0.1238   2.925e-02   529 |     0.5024   1.3208
+       3     13.1215                  -    0.1246   3.125e-02   534 |     0.5213   1.2780
+       4     13.1983                  -    0.1265   3.100e-02   544 |     0.5400   1.3473
+       5     13.1742                  -    0.1244   3.118e-02   531 |     0.5372   1.3405
+    R_eff : mean 13.1878 mOhm  sd 0.0525  spread 1.089 %
+    surf  : mean 0.1239 K  sd 0.0019
+    core  : mean 0.5263 K  sd 0.0140  min 0.5024  max 0.5400
+    non-convergence: 0.0 % (0/6)
+    SELECTED by lowest PDE+BC residual (truth-free): seed 2
+      -> core RMSE 0.5024 K, max 1.3208 K, surface RMSE 0.1238 K
+    (reference only, NOT used for selection: best-by-core is seed 2 at 0.5024 K)
+
+====================================================================================================
+  DOES THE PINN'S ADVANTAGE REPLICATE?
+====================================================================================================
+                    classical         PINN   PINN/classical
+    DS1 surface        0.5613       0.1238             0.22
+    DS1 core           1.0544       0.5024             0.48
+    (DS2 for comparison: classical 0.8943, PINN 0.6135, ratio 0.69)
+
+    If the ratio here is also well below 1, the advantage replicates and is
+    a property of the METHOD.  If it is near or above 1, the DS2 advantage
+    was record-specific and should not be generalised.

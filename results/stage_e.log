@@ -28,3 +28,30 @@ STAGE E -- inverse PINN, DATASET 2, SURFACE ONLY, 6 seeds
     (reference only, NOT used for selection: best-by-core is seed 3 at 0.6135 K)
     seed 0: 159 s, 566 closures, R_eff 12.9726 mOhm, surf 0.1846 K
     seed 1: 164 s, 568 closures, R_eff 12.9815 mOhm, surf 0.1846 K
+    seed 2: 169 s, 582 closures, R_eff 12.9875 mOhm, surf 0.1832 K
+    seed 3: 152 s, 552 closures, R_eff 13.0576 mOhm, surf 0.1815 K
+    seed 4: 142 s, 556 closures, R_eff 12.9510 mOhm, surf 0.1843 K
+    seed 5: 140 s, 561 closures, R_eff 12.9945 mOhm, surf 0.1867 K
+
+  --- order 1: R_eff (1 + a1 x) ---
+    seed  R_eff mOhm              shape  surfRMSE   selection  clos |  CORE RMSE  coremax
+       0     12.9726             +0.169    0.1846   1.256e-01   566 |     0.5929   1.7609
+       1     12.9815             +0.172    0.1846   1.226e-01   568 |     0.5795   1.6997
+       2     12.9875             +0.162    0.1832   1.224e-01   582 |     0.5861   1.7762
+       3     13.0576             +0.179    0.1815   1.175e-01   552 |     0.5710   1.4981
+       4     12.9510             +0.171    0.1843   1.250e-01   556 |     0.5882   1.7644
+       5     12.9945             +0.172    0.1867   1.234e-01   561 |     0.5718   1.6957
+    R_eff : mean 12.9908 mOhm  sd 0.0360  spread 0.821 %
+    surf  : mean 0.1842 K  sd 0.0017
+    core  : mean 0.5816 K  sd 0.0090  min 0.5710  max 0.5929
+    non-convergence: 0.0 % (0/6)
+    SELECTED by lowest PDE+BC residual (truth-free): seed 3
+      -> core RMSE 0.5710 K, max 1.4981 K, surface RMSE 0.1815 K
+    (reference only, NOT used for selection: best-by-core is seed 3 at 0.5710 K)
+
+====================================================================================================
+  CONTROL (trap 5.1): identical fit with the I(t)^2 factor REMOVED
+====================================================================================================
+    surface RMSE 0.5356 K   CORE RMSE 1.1192 K
+    vs with I^2: surface 0.1960 K, core 0.6344 K
+    -> removing the current factor costs 2.7x on the surface and 1.8x on the core

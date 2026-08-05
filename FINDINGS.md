@@ -1,124 +1,4 @@
-"""Generate FINDINGS.md from the saved results, so no number is retyped by hand."""
-import os
-import numpy as np
-from scipy.optimize import minimize_scalar
-
-from part7_lib import P, Record, RadialFV
-from stage_e_inverse import H_FIXED, K_FIXED
-
-H_DS2, K_DS2 = 37.2846, 0.418697          # Stage B [B2] on DS2, surface only
-
-fv = RadialFV(N=40)
-
-
-def classical(rec, h, k):
-    T0 = float(rec.T_s[0])
-
-    def pred(R, kk=k):
-        return fv.solve(rec.t, (rec.I ** 2) * R / P.V_b, rec.T_inf, T0,
-                        k=kk, h=h, rho_cp=P.rho_cp())
-    r = minimize_scalar(lambda R: float(np.sum((pred(R)["T_surf"] - rec.T_s) ** 2)),
-                        bounds=(1e-4, 0.2), method="bounded")
-    o = pred(r.x)
-    return {"R": r.x * 1000,
-            "surf": float(np.sqrt(((o["T_surf"] - rec.T_s) ** 2).mean())),
-            "core": float(np.sqrt(((o["T_core"] - rec.T_c) ** 2).mean())),
-            "grad": float(np.sqrt((((o["T_core"] - o["T_surf"])
-                                    - (rec.T_c - rec.T_s)) ** 2).mean())),
-            "pred": pred}
-
-
-def qs(rec, Bi):
-    e = rec.T_s + (Bi / 2) * (rec.T_s - rec.T_inf) - rec.T_c
-    return float(np.sqrt((e ** 2).mean())), float(np.abs(e).max())
-
-
-def pinn(path, rec):
-    d = np.load(path)
-    b = int(np.argmin(d["sel"]))
-    Tc, Ts = d["Tc"][b], d["Ts"][b]
-    e = Tc - rec.T_c
-    g = rec.T_c - rec.T_s
-    return {
-        "b": b, "R": float(d["R_eff"][b]) * 1000,
-        "surf": float(np.sqrt(((Ts - rec.T_s) ** 2).mean())),
-        "core": float(np.sqrt((e ** 2).mean())),
-        "cmax": float(np.abs(e).max()), "bias": float(e.mean()),
-        "grad": float(np.sqrt((((Tc - Ts) - g) ** 2).mean())),
-        "ratio": float(np.sqrt((e ** 2).mean())
-                       / np.sqrt(((Ts - rec.T_s) ** 2).mean())),
-        "pct_max": 100 * float(np.sqrt((e ** 2).mean())) / float(g.max()),
-        "sd_core": float(d["core_rmse"].std(ddof=1)),
-        "spread_R": 100 * float(d["R_eff"].max() - d["R_eff"].min())
-                    / float(d["R_eff"].mean()),
-        "n": len(d["R_eff"]),
-    }
-
-
-def consistency(path, rec, h, k):
-    """How far is the PINN's field from an actual solution of the PDE it claims?"""
-    d = np.load(path)
-    b = int(np.argmin(d["sel"]))
-    R = float(d["R_eff"][b])
-    Tc_p, Ts_p = d["Tc"][b], d["Ts"][b]
-    T0 = float(rec.T_s[0])
-    o = fv.solve(rec.t, (rec.I ** 2) * R / P.V_b, rec.T_inf, T0,
-                 k=k, h=h, rho_cp=P.rho_cp())
-    return {
-        "viol_surf": float(np.sqrt(((Ts_p - o["T_surf"]) ** 2).mean())),
-        "viol_core": float(np.sqrt(((Tc_p - o["T_core"]) ** 2).mean())),
-        "fv_core": float(np.sqrt(((o["T_core"] - rec.T_c) ** 2).mean())),
-        "fv_surf": float(np.sqrt(((o["T_surf"] - rec.T_s) ** 2).mean())),
-    }
-
-
-r2, r1 = Record("2"), Record("1")
-g2, g1 = r2.T_c - r2.T_s, r1.T_c - r1.T_s
-Bi2, Bi1 = H_FIXED * P.R_o / K_FIXED, H_DS2 * P.R_o / K_DS2
-
-cl2, cl1 = classical(r2, H_FIXED, K_FIXED), classical(r1, H_DS2, K_DS2)
-qs2, qs2m = qs(r2, Bi2)
-qs1, qs1m = qs(r1, Bi1)
-p0 = pinn("results/stage_e_shape0.npz", r2)
-p1 = pinn("results/stage_e_shape1.npz", r2)
-has_ds1 = os.path.exists("results/stage_e_ds1_shape0.npz")
-pd1 = pinn("results/stage_e_ds1_shape0.npz", r1) if has_ds1 else None
-cons = consistency("results/stage_e_shape0.npz", r2, H_FIXED, K_FIXED)
-
-# k sensitivity on DS2
-ks = []
-for k in (0.30, 0.35, K_FIXED, 0.404, 0.45, 0.55):
-    c = classical(r2, H_FIXED, k)
-    ks.append((k, H_FIXED * P.R_o / k, c["surf"], c["core"]))
-
-# ratio constancy
-m2 = (r2.T_s - r2.T_inf) > 0.5 * (r2.T_s - r2.T_inf).max()
-rat2 = (g2 / (r2.T_s - r2.T_inf))[m2]
-m1 = (r1.T_s - r1.T_inf) > 0.5 * (r1.T_s - r1.T_inf).max()
-rat1 = (g1 / (r1.T_s - r1.T_inf))[m1]
-
-# error decomposition
-e0 = p0["core"]
-d = np.load("results/stage_e_shape0.npz")
-Tc0 = d["Tc"][int(np.argmin(d["sel"]))]
-err = Tc0 - r2.T_c
-early = r2.t < 600
-rmse_early = float(np.sqrt((err[early] ** 2).mean()))
-rmse_late = float(np.sqrt((err[~early] ** 2).mean()))
-frac_sq = 100 * float((err[early] ** 2).sum() / (err ** 2).sum())
-
-P5 = "HIT" if min(p0["core"], p1["core"]) < 1.0 else "MISS"
-P6 = "HIT" if p0["ratio"] >= 2.0 else "MISS"
-
-ds1_block = ""
-if has_ds1:
-    ds1_block = f"""
-| **DS1** (roles swapped) | | | |
-| quasi-steady one-liner | — | — | **{qs1:.4f} K** |
-| classical FV | {cl1['R']:.3f} mΩ | {cl1['surf']:.4f} K | {cl1['core']:.4f} K |
-| inverse PINN (order 0) | {pd1['R']:.3f} mΩ | {pd1['surf']:.4f} K | {pd1['core']:.4f} K |"""
-
-txt = f"""# FINDINGS — Part 7: internal temperature validated against a measured core
+# FINDINGS — Part 7: internal temperature validated against a measured core
 
 ## The headline, stated the way the evidence supports it
 
@@ -127,15 +7,15 @@ cell is reproduced to:
 
 | method | DS2 core RMSE | DS1 core RMSE |
 |---|---|---|
-| **quasi-steady one-liner** `T_core = T_surf + (Bi/2)(T_surf − T_inf)` | **{qs2:.4f} K** | **{qs1:.4f} K** |
-| classical transient finite-volume | {cl2['core']:.4f} K | {cl1['core']:.4f} K |
-| **inverse PINN** (the method under test) | **{p0['core']:.4f} K** | {pd1['core']:.4f} K{'' if has_ds1 else ' (pending)'} |
+| **quasi-steady one-liner** `T_core = T_surf + (Bi/2)(T_surf − T_inf)` | **0.1409 K** | **0.3366 K** |
+| classical transient finite-volume | 0.8943 K | 1.0544 K |
+| **inverse PINN** (the method under test) | **0.6135 K** | 0.5024 K |
 
-against measured core-to-surface gradients peaking at **{g2.max():.2f} K** (DS2) and
-**{g1.max():.2f} K** (DS1).
+against measured core-to-surface gradients peaking at **6.54 K** (DS2) and
+**7.13 K** (DS1).
 
 **So the internal field IS reconstructable from surface data to a fraction of a kelvin — but
-the PINN is not what does it.** A single algebraic line beats it by {p0['core']/qs2:.1f}× on DS2.
+the PINN is not what does it.** A single algebraic line beats it by 4.4× on DS2.
 This is a negative result for the method and the most useful thing in the notebook.
 
 The PINN still passes its pre-registered target (P5, < 1 K), and every reported number is
@@ -148,22 +28,22 @@ leak-free. It is simply not the best tool for this problem, and saying so is the
 Because **the problem is quasi-steady**. The measured ratio (core − surface)/(surface − ambient)
 over the hot part of each record is
 
-* DS2: **{rat2.mean():.4f} ± {rat2.std():.4f}** (2.0 % variability)
-* DS1: **{rat1.mean():.4f} ± {rat1.std():.4f}** (1.7 % variability)
+* DS2: **0.6161 ± 0.0126** (2.0 % variability)
+* DS1: **0.6218 ± 0.0103** (1.7 % variability)
 
 Constant to about 2 % across a 3541 s drive cycle with 30 A peaks. The radial profile shape
 never really changes; only its amplitude does. One number therefore captures the entire spatial
 structure, and there is nothing dynamic left for a PDE solver to add.
 
-That constant is the steady analytic result Bi/2 = {Bi2/2:.4f} (DS2), which matches the measured
-{rat2.mean():.4f} to {100*abs(rat2.mean()-Bi2/2)/rat2.mean():.1f} %. The relation quoted in the
+That constant is the steady analytic result Bi/2 = 0.6071 (DS2), which matches the measured
+0.6161 to 1.5 %. The relation quoted in the
 project's own plausibility gate turns out to be a better *predictor* than the machinery it was
 meant to check.
 
 **The comparison is fair.** The one-liner anchors on the measured surface while the PINN
 re-predicts it, so the PINN's surface error could have been inherited. Removing that — taking
-only the PINN's *gradient* and adding it to the measured surface — still gives {p0['grad']:.4f} K
-against the one-liner's {qs2:.4f} K. The gap is in the gradient itself, not in the anchoring.
+only the PINN's *gradient* and adding it to the measured surface — still gives 0.5990 K
+against the one-liner's 0.1409 K. The gap is in the gradient itself, not in the anchoring.
 
 **What the transient models are still for.** The one-liner needs Bi, and Bi is *not* free: a
 ±15 % error in it costs 5–10× in core RMSE. Bi = hR/k came from a **transient** surface-only fit
@@ -176,12 +56,12 @@ use algebra to predict.** The PINN adds nothing to either half.
 
 | # | Prediction | Outcome | Observed |
 |---|---|---|---|
-| P1 | core−surface max between 0.5 and 5 K | **MISS** | {g1.max():.2f} K (DS1), {g2.max():.2f} K (DS2) — 43 % above the interval |
+| P1 | core−surface max between 0.5 and 5 K | **MISS** | 7.13 K (DS1), 6.54 K (DS2) — 43 % above the interval |
 | P2 | classical surface RMSE ≤ 0.3 K | **HIT** | 0.220 K (DS1), 0.213 K (DS2) with the measured source |
-| P3 | {{R₀, shape, h}} not identifiable, worst rel sd > 25 % | **MISS** | 1.3–10.6 % at shape orders 1–3; only order 4 breaches 25 % |
+| P3 | {R₀, shape, h} not identifiable, worst rel sd > 25 % | **MISS** | 1.3–10.6 % at shape orders 1–3; only order 4 breaches 25 % |
 | P4 | forward PINN within 5 % on centre-surface difference | **HIT** | 4.66 % (DS2), 1.39 % (DS1) — DS2 close to the line |
-| P5 | **predicted core < 1 K RMSE** | **{P5}** | **{p0['core']:.4f} K** (order 0), {p1['core']:.4f} K (order 1) |
-| P6 | core error ≥ 2× surface-fit error | **{P6}** | ratio {p0['ratio']:.2f} (order 0), {p1['ratio']:.2f} (order 1) |
+| P5 | **predicted core < 1 K RMSE** | **HIT** | **0.6135 K** (order 0), 0.5710 K (order 1) |
+| P6 | core error ≥ 2× surface-fit error | **HIT** | ratio 3.11 (order 0), 3.15 (order 1) |
 
 Four hits, two misses. Plus **three predictions I made mid-session and got wrong**, logged
 because they cost real debugging:
@@ -202,18 +82,22 @@ because they cost real debugging:
 | | R_eff | surface RMSE | **core RMSE** |
 |---|---|---|---|
 | **DS2** | | | |
-| quasi-steady one-liner | — | — | **{qs2:.4f} K** (max {qs2m:.4f}) |
-| classical FV | {cl2['R']:.3f} mΩ | {cl2['surf']:.4f} K | {cl2['core']:.4f} K |
-| inverse PINN, order 0 | {p0['R']:.3f} mΩ | {p0['surf']:.4f} K | {p0['core']:.4f} K (max {p0['cmax']:.4f}) |
-| inverse PINN, order 1 | {p1['R']:.3f} mΩ | {p1['surf']:.4f} K | {p1['core']:.4f} K (max {p1['cmax']:.4f}) |{ds1_block}
+| quasi-steady one-liner | — | — | **0.1409 K** (max 0.3742) |
+| classical FV | 14.301 mΩ | 0.4652 K | 0.8943 K |
+| inverse PINN, order 0 | 13.108 mΩ | 0.1974 K | 0.6135 K (max 1.9093) |
+| inverse PINN, order 1 | 13.058 mΩ | 0.1815 K | 0.5710 K (max 1.4981) |
+| **DS1** (roles swapped) | | | |
+| quasi-steady one-liner | — | — | **0.3366 K** |
+| classical FV | 13.649 mΩ | 0.5613 K | 1.0544 K |
+| inverse PINN (order 0) | 13.265 mΩ | 0.1238 K | 0.5024 K |
 
-Across {p0['n']} seeds (order 0, DS2): core RMSE sd {p0['sd_core']:.4f} K, R_eff spread
-{p0['spread_R']:.3f} %, **non-convergence 0 %**. Selection was on the PDE + BC residual over a
+Across 6 seeds (order 0, DS2): core RMSE sd 0.0086 K, R_eff spread
+0.489 %, **non-convergence 0 %**. Selection was on the PDE + BC residual over a
 fixed 20 000-point collocation set, never on proximity to the core.
 
 **Where the PINN's error lives.** It is not uniform in time: the **first 10 minutes is 17 % of
-the record but {frac_sq:.0f} % of the squared error** (RMSE {rmse_early:.4f} K there,
-{rmse_late:.4f} K afterwards). The start-up transient has the sharpest radial gradients and the
+the record but 56 % of the squared error** (RMSE 1.1146 K there,
+0.4470 K afterwards). The start-up transient has the sharpest radial gradients and the
 model assumes a perfectly uniform initial field — the one regime where "quasi-steady" is false.
 
 **Trap 5.1 control.** Removing the I(t)² factor costs 2.7× on the surface fit and 1.8× on the
@@ -227,10 +111,12 @@ Refitting R_eff at each k against the same surface data:
 
 | k (W/m/K) | Bi | surface RMSE | core RMSE |
 |---|---|---|---|
-""" + "\n".join(
-    f"| {k:.4f}{' **(ours)**' if abs(k-K_FIXED) < 1e-9 else ''}"
-    f"{' *(Richardson)*' if abs(k-0.404) < 1e-9 else ''} | {b:.3f} | {s:.4f} | {c:.4f} |"
-    for k, b, s, c in ks) + f"""
+| 0.3000 | 1.594 | 0.5433 | 1.8209 |
+| 0.3500 | 1.366 | 0.4961 | 1.0998 |
+| 0.3937 **(ours)** | 1.214 | 0.4652 | 0.8943 |
+| 0.4040 *(Richardson)* | 1.183 | 0.4590 | 0.9027 |
+| 0.4500 | 1.062 | 0.4355 | 1.0941 |
+| 0.5500 | 0.869 | 0.4007 | 1.6983 |
 
 The surface fit improves **monotonically** with k while the core error has a minimum near
 k ≈ 0.39 and roughly doubles either side. At k = 0.55 the surface fit is the best in the table
@@ -238,7 +124,7 @@ and the core prediction is nearly twice as bad.
 
 The core prediction is essentially a function of k; surface data cannot identify k (CRLB
 correlation with h is 0.998). **So the headline rests on an input, not an output.** Our
-leak-free k = {K_FIXED:.5f}, obtained from a surface-only fit on the *other* record, lands within
+leak-free k = 0.39375, obtained from a surface-only fit on the *other* record, lands within
 about 1 % of the core-optimal value — either good transfer or luck, and one record cannot tell
 the difference.
 
@@ -247,7 +133,7 @@ the difference.
 ## 5. What is established
 
 1. **The internal temperature of this cell is recoverable from surface data to
-   {qs2:.2f}–{qs1:.2f} K**, verified against a real core thermocouple rather than a model. That
+   0.14–0.34 K**, verified against a real core thermocouple rather than a model. That
    is the gap this project existed to close, and it is closed.
 2. **The mechanism is quasi-steadiness**, demonstrated directly: the gradient/rise ratio is
    constant to ~2 % across both records.
@@ -277,13 +163,13 @@ the difference.
 
    | | surface RMSE | core RMSE |
    |---|---|---|
-   | PINN's own field | {p0['surf']:.4f} K | {p0['core']:.4f} K |
-   | same R_eff, physics enforced exactly | {cons['fv_surf']:.4f} K | {cons['fv_core']:.4f} K |
-   | **difference = PDE violation** | **{cons['viol_surf']:.4f} K** | **{cons['viol_core']:.4f} K** |
+   | PINN's own field | 0.1974 K | 0.6135 K |
+   | same R_eff, physics enforced exactly | 0.8395 K | 1.5238 K |
+   | **difference = PDE violation** | **0.8029 K** | **1.0570 K** |
 
-   The PINN's field departs from a true solution by ~{cons['viol_surf']:.1f} K on the surface —
+   The PINN's field departs from a true solution by ~0.8 K on the surface —
    larger than its own core error. Solved correctly, its recovered parameter gives
-   {cons['fv_core']:.2f} K, *worse* than the classical fit's {cl2['core']:.2f} K. So the PINN is
+   1.52 K, *worse* than the classical fit's 0.89 K. So the PINN is
    functioning as a flexible curve-fitter with a physics-flavoured regulariser, and its good core
    number is substantially a consequence of bending the physics, not obeying it.
 
@@ -308,7 +194,7 @@ the difference.
    apparatus is beaten by one line of algebra. Without B0/B1/B2 in the table, this notebook would
    have reported a 0.61 K success and buried a 0.14 K result that needed no network.
 2. **Report the parameter correlation matrix, not just marginal standard deviations.** The CRLB
-   rated {{h, k, ρc_p}} identifiable at 3.9 %; the fit then drove k 1140 % away, ~300× outside
+   rated {h, k, ρc_p} identifiable at 3.9 %; the fit then drove k 1140 % away, ~300× outside
    the CRLB ellipse, for 4 K of core error. The 0.99 k–ρc_p correlation was the warning.
 3. **A better surface fit can mean a worse internal answer.** Stage B [B3] had the best surface
    RMSE of any model and the worst core error.
@@ -339,14 +225,3 @@ it.
 If the quasi-steady relation holds up under (3), the practical conclusion for battery thermal
 management is that core-temperature estimation on cells like this needs a good Bi and a
 thermocouple — not a neural network.
-"""
-
-with open("FINDINGS.md", "w", encoding="utf-8") as f:
-    f.write(txt)
-
-print("wrote FINDINGS.md")
-print(f"  quasi-steady  DS2 {qs2:.4f} K   DS1 {qs1:.4f} K")
-print(f"  classical FV  DS2 {cl2['core']:.4f} K   DS1 {cl1['core']:.4f} K")
-print(f"  inverse PINN  DS2 {p0['core']:.4f} K"
-      + (f"   DS1 {pd1['core']:.4f} K" if has_ds1 else "   DS1 pending"))
-print(f"  P5 {P5}, P6 {P6}")

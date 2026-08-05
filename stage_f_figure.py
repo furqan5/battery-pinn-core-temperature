@@ -83,6 +83,24 @@ def main():
               f"P6 (core err >= 2x surface err) -> "
               f"{'HIT' if s['ratio'] >= 2.0 else 'MISS'} (ratio {s['ratio']:.2f})")
 
+    # ---- where does the error actually live? ---- #
+    print()
+    print("  Error is NOT uniform in time -- decomposition of the order-0 result:")
+    Tc0 = picked[0]
+    e = Tc0 - rec.T_c
+    for lo, hi, lab in ((0, 600, "first 10 min (start-up transient)"),
+                        (600, 1200, "10-20 min"),
+                        (600, int(rec.t[-1]), "after the first 10 min"),
+                        (0, int(rec.t[-1]), "whole record")):
+        m = (rec.t >= lo) & (rec.t < hi)
+        print(f"    {lab:34s} RMSE {np.sqrt((e[m]**2).mean()):.4f} K   "
+              f"max {np.abs(e[m]).max():.4f} K   bias {e[m].mean():+.4f} K")
+    m_early = rec.t < 600
+    print(f"    -> the first 10 min is {100*m_early.mean():.0f} % of the record but "
+          f"{100*(e[m_early]**2).sum()/(e**2).sum():.0f} % of the squared error.")
+    print("    Physically reasonable: the start-up transient has the sharpest radial")
+    print("    gradients and the model assumes a perfectly uniform initial field.")
+
     # ---------------- figure ---------------- #
     Tc, Ts, d, b = picked
     t = rec.t / 60.0
@@ -101,7 +119,10 @@ def main():
     ax.plot(t, rec.T_inf, color="#777777", lw=0.9, ls=":", label="ambient")
 
     ax.set_ylabel("temperature  /  $^\\circ$C")
-    ax.legend(loc="upper left", fontsize=8)
+    # headroom so the legend never sits on the traces
+    ylo, yhi = ax.get_ylim()
+    ax.set_ylim(ylo, yhi + 0.30 * (yhi - ylo))
+    ax.legend(loc="upper left", fontsize=8, ncol=2)
     s0 = rows[0]
     ax.set_title(
         "A123 26650 LFP: internal temperature reconstructed from surface data alone\n"

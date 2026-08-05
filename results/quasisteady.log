@@ -1,0 +1,50 @@
+﻿==================================================================================================
+QUASI-STEADY BASELINE -- audit
+==================================================================================================
+
+  DATASET 2   Bi = 1.2142 (h=37.0607, k=0.393747 from the OTHER record's surface-only fit)
+    B2 core RMSE = 0.1409 K, max 0.3742 K, bias -0.0571 K
+    sensitivity to Bi (the ONLY parameter it uses):
+            Bi     Bi/2  core RMSE
+        0.8499   0.4250     1.6090
+        1.0321   0.5160     0.8461
+        1.2142   0.6071     0.1409   <-- ours
+        1.3963   0.6982     0.7076
+        1.5784   0.7892     1.4691
+      best-possible ratio by least squares = 0.6154 (vs Bi/2 = 0.6071, 1.4 % apart)
+      NOTE: that best-possible value USES the core. It is a yardstick,
+            not a predictor. Bi/2 above is core-blind.
+    diffusion time R^2/alpha = 1043 s; the measured gradient/rise ratio has
+      mean 0.6161, sd 0.0126 over the hot window
+      -> the ratio is nearly CONSTANT in time, i.e. the radial profile
+         is quasi-steady, so one number captures it.
+
+  DATASET 1   Bi = 1.1487 (h=37.2846, k=0.418697 from the OTHER record's surface-only fit)
+    B2 core RMSE = 0.3366 K, max 0.6900 K, bias -0.2548 K
+    sensitivity to Bi (the ONLY parameter it uses):
+            Bi     Bi/2  core RMSE
+        0.8041   0.4021     1.5313
+        0.9764   0.4882     0.9310
+        1.1487   0.5744     0.3366   <-- ours
+        1.3210   0.6605     0.2912
+        1.4934   0.7467     0.8839
+      best-possible ratio by least squares = 0.6208 (vs Bi/2 = 0.5744, 7.5 % apart)
+      NOTE: that best-possible value USES the core. It is a yardstick,
+            not a predictor. Bi/2 above is core-blind.
+    diffusion time R^2/alpha = 981 s; the measured gradient/rise ratio has
+      mean 0.6218, sd 0.0103 over the hot window
+      -> the ratio is nearly CONSTANT in time, i.e. the radial profile
+         is quasi-steady, so one number captures it.
+
+==================================================================================================
+  4. IS THE COMPARISON FAIR?  B2 anchors on the measured surface; the PINN
+     re-predicts the surface and inherits that error. Separate the two.
+==================================================================================================
+    variant                                 core RMSE  grad RMSE
+    PINN, its own surface (as reported)        0.6135     0.6135
+    PINN GRADIENT + measured surface           0.5990     0.5990
+    B2 quasi-steady                            0.1409     0.1409
+
+    Even with the surface-fit error removed, the PINN's GRADIENT is worse
+    than the one-line relation. The gap is not an artefact of anchoring.
+    classical FV GRADIENT + meas. surface      0.5622     0.4697

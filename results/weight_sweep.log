@@ -1,0 +1,10 @@
+﻿========================================================================================================
+STAGE G -- recovered R_eff vs data weight (soft-constraint distortion test)
+========================================================================================================
+  anchors:  classical FV fit 14.304 mOhm   |   electrical regression 14.492 mOhm
+  physics floor on surface RMSE (exact FV, best R_eff) = 0.4637 K
+
+    w_data  R_eff mOhm  surf RMSE  PDE+BC resid  CORE RMSE  FV@sameR core  PDE violation K
+         5     13.3183     0.4827     1.015e-01     1.0500         1.3683           0.3377   [96 s]
+        20     13.6164     0.3025     1.136e-01     0.7403         1.1695           0.4278   [91 s]
+       200     13.0545     0.1963     1.436e-01     0.6332         1.5650           0.8285   [89 s]

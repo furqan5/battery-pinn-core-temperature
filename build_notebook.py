@@ -32,6 +32,13 @@ This notebook closes that gap:
 > **Fit the inverse PINN using the SURFACE trace only. Predict the CORE temperature.
 > Compare against the MEASURED core temperature. Report the error in Kelvin.**
 
+**The answer, up front.** The core is reconstructed from surface data to a fraction of a kelvin
+— but the inverse PINN is not what does it. A one-line quasi-steady relation does it about four
+times better, because on this cell and these duty cycles the radial profile's *shape* is
+constant to ~2 % and only its amplitude varies. The PINN meets its pre-registered < 1 K target
+and is still the worst of the three methods tried. That negative result is the most useful thing
+here, and it only surfaced because trivial baselines were scored alongside the sophisticated one.
+
 **Runtime warning.** The PINN stages take roughly 35–50 minutes total on a 6-core CPU laptop.
 Stages A–C run in under a minute. Every cell is runnable top to bottom with no hidden state.
 
@@ -462,6 +469,10 @@ md(r"""
 
 Predicted core against measured core: RMSE, maximum error, and error as a fraction of the
 measured core-to-surface gradient. Plus the required figure.
+
+Read the second figure (the gradient) as carefully as the first. The trajectory is easy; the
+gradient is the part that carries spatial information, and it is where a reconstruction can look
+convincing while being wrong.
 """)
 
 code(r"""
@@ -473,11 +484,63 @@ display(Image("figures/gradient_validation.png"))
 """)
 
 md(r"""
+The gradient figure above is the one that matters, and it carries a warning: the predicted
+core−surface tracks the **slow envelope** of the measured gradient but is far too smooth to
+follow its ±1 K oscillations. A good-looking core RMSE can be produced by getting the *level*
+right while missing the *dynamics* entirely.
+
+So before concluding anything, score against baselines that need no network at all.
+
+- **B0**: `T_core = T_surf` — assume no gradient.
+- **B1**: `T_core = T_surf + mean(measured gradient)` — deliberately unfair, it is handed the
+  answer's mean.
+- **B2**: `T_core = T_surf + (Bi/2)(T_surf − T_inf)` — the steady analytic relation, using only
+  the surface, the ambient, and the Bi already fixed from the *other* record's surface-only fit.
+  Fully core-blind.
+""")
+
+code(r"""
+print(subprocess.run([sys.executable, "stage_g_skill.py"], capture_output=True,
+                     text=True).stdout)
+""")
+
+md(r"""
+### This reverses the conclusion
+
+**B2 — one line of algebra — beats the inverse PINN by about 4×.** It uses no network, no PDE
+solve, and no fitting beyond the Bi that was already fixed.
+
+A result that overturns the headline deserves more scrutiny than the one it displaces, not less.
+The audit below checks four things: that B2 is genuinely leak-free, that it is robust rather than
+lucky in Bi, *why* it beats a full transient solver, and whether the comparison is even fair —
+B2 anchors on the measured surface while the PINN re-predicts it, so the PINN's surface error
+could have been inherited rather than intrinsic.
+""")
+
+code(r"""
+print(subprocess.run([sys.executable, "stage_g_quasisteady.py"], capture_output=True,
+                     text=True).stdout)
+""")
+
+md(r"""
+All four checks pass, so the finding stands.
+
+The reason is **quasi-steadiness**: the measured ratio (core−surface)/(surface−ambient) is
+constant to about 2 % across both records. The radial profile's *shape* never changes, only its
+amplitude — so a single number captures the whole spatial structure and there is nothing dynamic
+left for a PDE solver to contribute. Isolating the gradient (removing the PINN's surface-fit
+error) does not close the gap, so it is not an artefact of anchoring.
+
+**What the transient models are still for.** B2 needs Bi, and Bi is not free — a ±15 % error in
+it costs 5–10× in core RMSE. Bi = hR/k came from a *transient* surface-only fit on the other
+record. The honest division of labour: **use a transient model to identify Bi, use algebra to
+predict.** The PINN improves neither half.
+
 ### The like-for-like control, and the parameter that actually decides the answer
 
-Trap 5.8 says compare like with like. The PINN must be measured against a baseline given the
-**same information and the same fixed parameters** — not against a weaker one. The cell below
-does that, then sweeps `k`, the parameter the surface data cannot identify.
+Trap 5.8 says compare like with like. The cell below gives the classical baseline the **same
+information and the same fixed parameters** as the PINN, then sweeps `k` — the parameter the
+surface data cannot identify and on which everything ultimately rests.
 """)
 
 code(r"""
@@ -533,6 +596,73 @@ selection, and it would invalidate the headline.
 
 code(r"""
 print(subprocess.run([sys.executable, "stage_g_weight_sweep.py"],
+                     capture_output=True, text=True).stdout)
+""")
+
+md(r"""
+### Leak audit
+
+The rule is: if a result looks too good, check for a leak before reporting it. The order-0 fit
+beat the classical control, so this ran first. **It found one** — the initial condition was
+`0.5·(T_s[0] + T_c[0])`, which reads the measured core at t = 0.
+
+One number, on a near-isothermal cell, but small is not absent. It was removed, its magnitude
+quantified, and — importantly — Stage B's `h` and `k` were re-derived because they had been
+fitted with the same contaminated initial condition.
+""")
+
+code(r"""
+print(subprocess.run([sys.executable, "stage_g_leak_audit.py"],
+                     capture_output=True, text=True).stdout)
+""")
+
+md(r"""
+### Why does the PINN beat a physics-exact classical fit?
+
+That result needs a mechanism, not a shrug. Two facts have to be explained together: the PINN
+recovers `R_eff` about 9 % **below** two independent anchors, yet predicts the core
+**better**. Under uniform generation those should not co-occur — less heat means a smaller
+gradient means a worse core.
+
+**First hypothesis, tested and refuted:** centre-weighted generation. If heat were concentrated
+toward the axis, a fixed surface trace would need less total heat while producing a *larger*
+gradient — matching both symptoms. The classical test below shows `R_eff` moving the *wrong way*.
+""")
+
+code(r"""
+print(subprocess.run([sys.executable, "stage_g_nonuniform.py"],
+                     capture_output=True, text=True).stdout)
+""")
+
+md(r"""
+**Second attempt — anatomise what the classical model actually leaves behind.** This one lands.
+""")
+
+code(r"""
+print(subprocess.run([sys.executable, "stage_g_residual_anatomy.py"],
+                     capture_output=True, text=True).stdout)
+""")
+
+md(r"""
+The residual is **100 % model-form error** (thermocouple noise is 0.0097 K against a 0.46 K
+residual), **strongly autocorrelated with a 423 s decay** — essentially the cell's own 405 s
+thermal time constant — and its strongest correlate is **time** (r = +0.51), not I² (r = 0.10).
+So the source model's shape is sound and the deficiency is a slow systematic drift.
+
+A neural deviation field that is a smooth function of time can absorb exactly that,
+non-parametrically. That buys surface accuracy, drags the core prediction along with it, and
+pays for it by biasing `R_eff` low. **It buys accuracy without insight** — there is no mechanism
+identified, so there is no guarantee it transfers.
+
+### So: does it transfer?
+
+The decisive test. Swap the roles of the two records — take `h` and `k` from **DS2's**
+surface-only fit and fit **DS1**. If the advantage is a property of the method it should
+reappear; if it was DS2's idiosyncrasy, it should not.
+""")
+
+code(r"""
+print(subprocess.run([sys.executable, "stage_e_replicate_ds1.py", "6"],
                      capture_output=True, text=True).stdout)
 """)
 
