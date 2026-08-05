@@ -1,0 +1,40 @@
+﻿============================================================================================
+STAGE D (split) -- forward gate, dataset 2
+============================================================================================
+  FD reference: core-surf max 6.3789 K, rms 4.9770 K
+    Fo=3.4824  Bi=1.2549  dT_ref=10.6778 K  tau_lumped=405.1 s
+    T_l(0) = 8.2222 C  (measured initial temperature, +0.195 K above ambient -- trap 5.2 carried here)
+      adam     0 loss=1.8513e+01
+      adam   300 loss=1.6137e-01
+      adam   600 loss=1.4510e-01
+      adam   900 loss=1.3966e-01
+      adam  1200 loss=1.2836e-01
+      L-BFGS closures = 545 (OK) in 43 s
+  total 116 s
+  PINN vs FD:
+    surface   RMSE 0.15787 K  max 0.36844 K
+    core      RMSE 0.12536 K  max 0.31215 K
+    core-surf RMSE 0.23185 K  max 0.61215 K   <-- SCORED
+    relative core-surf error = 4.6584 %  (P4 threshold 5 %)  -> PASS
+    plausibility ratio 0.6196 vs Bi/2 0.6274 -> factor 0.988 (within 3x)
+
+============================================================================================
+STAGE D (split) -- forward gate, dataset 1
+============================================================================================
+  FD reference: core-surf max 7.6417 K, rms 4.3599 K
+    Fo=5.8732  Bi=1.2549  dT_ref=11.6151 K  tau_lumped=405.1 s
+    T_l(0) = 8.1838 C  (measured initial temperature, +0.432 K above ambient -- trap 5.2 carried here)
+      adam     0 loss=1.1513e+01
+      adam   300 loss=5.9897e-01
+      adam   600 loss=1.5752e-01
+      adam   900 loss=6.8994e-02
+      adam  1200 loss=5.3825e-02
+      L-BFGS closures = 522 (OK) in 40 s
+  total 93 s
+  PINN vs FD:
+    surface   RMSE 0.04669 K  max 0.14396 K
+    core      RMSE 0.04975 K  max 0.16806 K
+    core-surf RMSE 0.06077 K  max 0.18669 K   <-- SCORED
+    relative core-surf error = 1.3938 %  (P4 threshold 5 %)  -> PASS
+    plausibility ratio 0.6284 vs Bi/2 0.6274 -> factor 1.002 (within 3x)
+
