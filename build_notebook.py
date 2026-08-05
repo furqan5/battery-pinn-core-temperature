@@ -414,12 +414,46 @@ on a large *fixed* collocation set, never the one closest to the core. Six seeds
 non-convergence rate both reported.
 """)
 
+md(r"""
+**Cost control, stated explicitly.** A full 6-seed fit of both source orders takes roughly
+**80 minutes** on this laptop (~6 min per seed). The two switches below are the only knobs; both
+print what they did, so nothing is hidden.
+""")
+
 code(r"""
-t0 = time.time()
-out_e = subprocess.run([sys.executable, "stage_e_inverse.py", "6"],
-                       capture_output=True, text=True)
-print(out_e.stdout)
-print(f"[Stage E wall time: {(time.time()-t0)/60:.1f} min]")
+N_SEEDS      = 6      # >= 5 required. Set to 2 for a ~15 min smoke run.
+REUSE_CACHED = True   # Load results/stage_e_shape*.npz if present instead of refitting.
+                      # Set False to force a fresh fit. Either way it says which it did.
+
+import os
+from stage_e_inverse import run_inverse, summarise, H_FIXED, K_FIXED
+
+rec2 = recs["2"]
+print(f"h = {H_FIXED:.4f} W/m2/K, k = {K_FIXED:.6f} W/m/K  (Stage B [B2], DS1 surface only)")
+print(f"Bi = {H_FIXED*P.R_o/K_FIXED:.4f}   Bi/2 = {H_FIXED*P.R_o/K_FIXED/2:.4f}")
+print(f"measured core-surface max on DS2 = {(rec2.T_c-rec2.T_s).max():.4f} K\n")
+
+stage_e = {}
+for n_shape, lab in ((0, "order 0: scalar R_eff"), (1, "order 1: R_eff (1 + a1 x)")):
+    path = f"results/stage_e_shape{n_shape}.npz"
+    if REUSE_CACHED and os.path.exists(path):
+        d = np.load(path)
+        print(f"[LOADED cached fit from {path} -- set REUSE_CACHED=False to refit]")
+        runs = [{"R_eff": float(d["R_eff"][i]), "shape": np.array([]),
+                 "Tc": d["Tc"][i], "Ts": d["Ts"][i], "sel": float(d["sel"][i]),
+                 "closures": 999, "surf_rmse": float(d["surf_rmse"][i])}
+                for i in range(len(d["R_eff"]))]
+    else:
+        print(f"[FITTING {N_SEEDS} seeds for shape order {n_shape} -- this is the slow part]")
+        runs = []
+        for sd in range(N_SEEDS):
+            t0 = time.time()
+            r = run_inverse(rec2, n_shape=n_shape, seed=sd)
+            print(f"   seed {sd}: {time.time()-t0:.0f} s, R_eff "
+                  f"{1000*r['R_eff']:.4f} mOhm, surface {r['surf_rmse']:.4f} K")
+            runs.append(r)
+    summarise(rec2, runs, lab)
+    stage_e[n_shape] = runs
 """)
 
 # --------------------------------------------------------------- Stage F ---- #
@@ -431,11 +465,36 @@ measured core-to-surface gradient. Plus the required figure.
 """)
 
 code(r"""
-print(subprocess.run([sys.executable, "stage_f_figure.py"], capture_output=True,
-                     text=True).stdout)
+import stage_f_figure
+stage_f_figure.main()
 from IPython.display import Image, display
 display(Image("figures/core_validation.png"))
 display(Image("figures/gradient_validation.png"))
+""")
+
+md(r"""
+### The like-for-like control, and the parameter that actually decides the answer
+
+Trap 5.8 says compare like with like. The PINN must be measured against a baseline given the
+**same information and the same fixed parameters** — not against a weaker one. The cell below
+does that, then sweeps `k`, the parameter the surface data cannot identify.
+""")
+
+code(r"""
+print(subprocess.run([sys.executable, "stage_f_classical_control.py"],
+                     capture_output=True, text=True).stdout)
+""")
+
+md(r"""
+Read the `k` sweep carefully — it is the most important table in this notebook. The **surface fit
+improves monotonically with k**, while the **core error has a minimum and roughly doubles either
+side**. At k = 0.55 the surface fit is the best in the table and the core prediction is nearly
+twice as bad.
+
+So the headline number rests on `k`, which is an **input**, not something this experiment
+measured. Our leak-free k = 0.3908 (from a surface-only fit on the *other* record) lands within
+about 1 % of the core-optimal value. That is either good transfer between records or luck, and a
+single record cannot tell the difference. It is the first thing the next experiment should attack.
 """)
 
 # --------------------------------------------------------------- Stage G ---- #

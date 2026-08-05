@@ -1,0 +1,28 @@
+﻿============================================================================================
+CLASSICAL CONTROL -- identical information, identical fixed parameters
+============================================================================================
+  h = 37.0678, k = 0.390843 (DS1 surface-only), fitted on DS2 surface
+  R_eff              = 14.3040 mOhm
+  surface RMSE       = 0.4637 K
+  CORE RMSE          = 0.8895 K   max 2.6841 K
+  gradient RMSE      = 0.4624 K
+  core/surface ratio = 1.92
+
+  Sensitivity of the core prediction to k (refitting R_eff at each k):
+           k      Bi  R_eff mOhm  surf RMSE  CORE RMSE
+      0.3000   1.594     14.4604     0.5400     1.8181
+      0.3500   1.366     14.3641     0.4927     1.0949
+      0.3908   1.223     14.3040     0.4637     0.8895
+      0.4040   1.184     14.2873     0.4557     0.8969
+      0.4500   1.063     14.2366     0.4322     1.0895
+      0.5500   0.869     14.1561     0.3976     1.6956
+  -> the surface fit barely moves while the core error swings widely.
+     That is the whole identifiability problem in one table: k is an INPUT.
+
+  Entropic-term sensitivity (Forgez et al. 2010, dU/dT = -0.5 mV/K at 50% SOC):
+    off (headline)         R_eff 14.3040 mOhm  surf 0.4637 K  CORE 0.8895 K
+    on, -0.50 mV/K         R_eff 14.1452 mOhm  surf 0.4652 K  CORE 0.8927 K
+  NOTE: T_s is used in the reversible term, not T_c -- using the core
+        temperature there would be a leak.  A fixed dU/dT at 50% SOC is an
+        approximation; the SOC window here is only 11% wide, which limits
+        the error that introduces.

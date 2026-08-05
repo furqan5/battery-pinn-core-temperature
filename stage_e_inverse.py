@@ -120,7 +120,7 @@ def run_inverse(rec, h=H_FIXED, k=K_FIXED, rho_cp=None, n_shape=0, seed=0,
     rb = split_bc_residual(net, Bi, base, tb_e, R, shp, dT_ref)
     sel = float(((rp ** 2).mean() + w_bc * (rb ** 2).mean()).detach())
 
-    R_eff = float(torch.exp(logR))
+    R_eff = float(torch.exp(logR).detach())
     sh = shp.detach().numpy().copy() if shp is not None else np.array([])
     Tc, Ts = reconstruct(net, base, rec.t / t_ref, R_eff, sh, dT_ref)
     return {"R_eff": R_eff, "shape": sh, "Tc": Tc, "Ts": Ts, "sel": sel,
