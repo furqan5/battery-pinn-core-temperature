@@ -60,7 +60,10 @@ for a, b, c in zip(rr, x, yf):
                 xytext=(6, -11), fontsize=7.5, color="#555")
 
 ax.axvline(1.0, color="#444", lw=0.9, ls=":")
-ax.text(1.06, 0.55, "forcing time = diffusion time", rotation=90,
+# NOTE: ylim is set further down, so this y must sit inside the final limits.
+# An earlier version placed it at y=0.55, below the axis, where it collided with
+# the x-axis label in the compiled proof.
+ax.text(1.06, 12.0, "forcing time = diffusion time", rotation=90,
         fontsize=7.5, color="#444", va="bottom")
 ax.axhline(5.0, color="#2e7d32", lw=0.9, ls="--")
 ax.text(x.min() * 1.05, 5.4, "5 % error", fontsize=7.5, color="#2e7d32")

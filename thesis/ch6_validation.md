@@ -14,9 +14,9 @@ Provenance labels used throughout: **(a)** verified against a named source or an
 
 Every result in Chapters 3 to 5 shares one weakness. The reconstructed internal temperature field
 was scored against a finite-difference model, against a classical estimator, and against its own
-convergence diagnostics — never against a thermometer inside a cell. A method validated only
-against another model has not been validated as a measurement, and on a sealed 18650 there is no
-way to do better, because the cell has no core sensor.
+convergence diagnostics, but never against a thermometer inside a cell. A method validated only
+against another model has not been validated as a measurement. On a sealed 18650 there is no way
+to do better, because the cell has no core sensor.
 
 This chapter closes that gap. The experiment is narrow and its statement is short: fit the
 estimator to a **surface** temperature trace alone, predict the **core** temperature, and score
@@ -24,7 +24,7 @@ the prediction against a core thermocouple that the fit never saw. The deliverab
 kelvin.
 
 The answer is that the internal temperature of an A123 26650 cell is recoverable from surface data
-to a few tenths of a kelvin — and that the inverse physics-informed neural network is not what
+to a few tenths of a kelvin, and that the inverse physics-informed neural network is not what
 recovers it. A one-line algebraic relation does the same job about four times more accurately. The
 negative result is the more useful half, and Section 6.7 gives its mechanism.
 
@@ -62,10 +62,10 @@ entire experiment and would still produce plausible-looking numbers.
 
 Two features of Table 6.1 govern everything that follows. The peak core-to-surface difference is
 **7.13 K**, roughly forty times the 0.18 K bow available in the slab study of Chapter 3 **(a)**,
-because the cell runs at an 8 °C ambient with 30 A peaks — about 13 C on a 2.3 A h cell. There is
+because the cell runs at an 8 °C ambient with 30 A peaks (about 13 C on a 2.3 A h cell). There is
 a real spatial signal to reconstruct. Against that, the depth-of-discharge window spans only 11 to
-14 per cent of the axis, because these are charge-sustaining hybrid cycles. Any attempt to recover
-a heat-generation *shape* across the full state-of-charge range would be an extrapolation over
+14 per cent of the axis, because these are charge-sustaining hybrid cycles. Recovering a
+heat-generation *shape* across the full state-of-charge range would therefore extrapolate over
 86 per cent of a domain with no observations behind it, and Section 6.5 restricts the source model
 accordingly.
 
@@ -100,9 +100,9 @@ The core channel is the test set. It is not used for fitting, for initialisation
 stopping, for hyperparameter choice, or for selecting among random seeds. It is read once, after
 every estimator is frozen, to compute the reported errors.
 
-Two thermal parameters cannot be identified from a single surface trace — Chapter 4 establishes
-this quantitatively — so they must be fixed from outside the record being fitted. The published
-values from [1] were **not** used, because they were identified on drive cycle 1 using *both*
+Two thermal parameters cannot be identified from a single surface trace (Chapter 4 establishes this
+quantitatively), so they must be fixed from outside the record being fitted. The published values
+from [1] were **not** used, because they were identified on drive cycle 1 using *both*
 thermocouples; adopting them would import core-derived information into a supposedly core-blind
 fit. Instead, each record is fitted using the convection coefficient and radial conductivity
 obtained from a **surface-only** fit on the *other* record:
@@ -126,11 +126,10 @@ sample,
 
 $$T(r,0) = \tfrac{1}{2}\bigl[T_\mathrm{surf}(0) + T_\mathrm{core}(0)\bigr],$$
 
-which reads the held-out channel. One number, on a cell that is nearly isothermal at t = 0 — the
-measured core-to-surface difference there is 0.047 K on record 2 — so the leak is small. It is not
-zero. Quantified with the classical estimator, where the arithmetic is transparent, removing it
-moves the core RMSE from 0.8895 K to **0.8950 K**, a 0.6 per cent effect, and R_eff by
-0.02 per cent.
+which reads the held-out channel. The cell is nearly isothermal at t = 0, where the measured
+core-to-surface difference is 0.047 K on record 2, so the leak is small. It is not zero.
+Quantified with the classical estimator, where the arithmetic is transparent, removing it moves
+the core RMSE from 0.8895 K to **0.8950 K**, a 0.6 per cent effect, and R_eff by 0.02 per cent.
 
 The consequence that mattered was downstream. The convection coefficient and conductivity in
 Table 6.2 come from a surface-only fit that had used the *same* contaminated initial condition, so
@@ -139,9 +138,9 @@ to **0.393747**, a 0.74 per cent change. The initial condition is now the first 
 alone, every downstream constant was recomputed, and the contaminated results were deleted rather
 than adjusted.
 
-The episode is reported in full because the alternative — quietly patching a 0.6 per cent effect —
-would have left an unquantified dependency in the headline. It also demonstrates the hold-out rule
-doing the work it exists for.
+The episode is reported in full because the alternative, quietly patching a 0.6 per cent effect,
+would have left an unquantified dependency in the headline. It also shows the hold-out rule doing
+the work it exists for.
 
 ---
 
@@ -160,10 +159,10 @@ $$-k \left.\frac{\partial T}{\partial r}\right|_{r=R} = h\bigl[T(R,t) - T_\infty
 \qquad \left.\frac{\partial T}{\partial r}\right|_{r=0} = 0 .$$
 
 In words: stored heat per unit volume on the left is supplied by conduction from neighbouring
-shells plus internal generation. The 1/r factor is what distinguishes the cylinder from the slab
-of Chapter 3 — an outward shell has more area than the one inside it, so the same temperature
-gradient carries more power outward as r grows. The second boundary condition is not a physical
-constraint so much as a statement that the axis has no neighbour on its inner side.
+shells plus internal generation. The 1/r factor distinguishes the cylinder from the slab of
+Chapter 3. An outward shell has more area than the one inside it, so the same temperature gradient
+carries more power outward as r grows. The second boundary condition is less a physical constraint
+than a statement that the axis has no neighbour on its inner side.
 
 ### 6.4.2 Discretisation and its verification
 
@@ -172,8 +171,8 @@ marched with backward Euler. Finite volume rather than finite difference for one
 the inner face of the first cell has zero area, so the symmetry condition holds **identically by
 construction** rather than being imposed as an extra equation that can be got wrong.
 
-The scheme reproduces the analytic uniform-generation steady state — centre-minus-surface
-$q'''R^2/4k$ and surface-minus-ambient $q'''R/2h$ — to within **1×10⁻¹³ relative** at every grid
+The scheme reproduces the analytic uniform-generation steady state, centre-minus-surface
+$q'''R^2/4k$ and surface-minus-ambient $q'''R/2h$, to within **1×10⁻¹³ relative** at every grid
 resolution tested from N = 10 to N = 160 **(a)**. Twenty-four such checks pass, covering global
 energy conservation, the parabolic profile shape, the adiabatic limit, the lumped cooling time
 constant, axis symmetry and time-step refinement.
@@ -196,7 +195,7 @@ entire quantity of interest.
 The first attempt failed, and instructively. A full-field network with Fourier time features
 reached only **39.2 per cent** relative error on the gradient against a 5 per cent target. The
 partial differential equation residual stalled at 2.68 while the dimensionless source term has a
-mean of 2.3 — the residual was the same size as the forcing, so the equation was not being
+mean of 2.3. The residual was the same size as the forcing, so the equation was not being
 satisfied at all.
 
 Two causes were measured rather than assumed. First, the drive-cycle source is genuinely
@@ -204,7 +203,7 @@ broadband: half of its spectral energy lies above harmonic 233 of the record, co
 periods under 15 s, and 99 per cent below 2.3 s. Representing that with Fourier features would
 require roughly 1500 of them. Second, and less expected, the Fourier features were actively
 harmful. On a constant-source control problem with a known answer, the gradient error rose
-monotonically with the number of features — 0.086 per cent with none, 0.150 per cent with four,
+monotonically with the number of features: 0.086 per cent with none, 0.150 per cent with four,
 0.493 per cent with sixteen, and 4.88 per cent with sixty-four **(a)**. They could not reach the
 bandwidth the problem needed and meanwhile degraded the optimisation landscape for the smooth
 solution that remained.
@@ -226,8 +225,8 @@ by $T_l - T_\infty$, the output of a first-order filter with a 405 s time consta
 attenuates 15 s content by a factor of about 169. The deviation $w$ is smooth.
 
 This does not reduce the network's role to bookkeeping. The lumped solution $T_l$ carries **no
-radial information whatsoever**; the entire core-to-surface gradient — the only quantity this
-chapter is about — lives in $w$. The split removes the part that can be integrated exactly and
+radial information whatsoever**, so the entire core-to-surface gradient, the only quantity this
+chapter is about, lives in $w$. The split removes the part that can be integrated exactly and
 leaves the network exactly the part that cannot.
 
 With that formulation the gate passes: **4.66 per cent** on record 2 and **1.39 per cent** on
@@ -354,13 +353,13 @@ equation residual, in physics violation, and in bias on the recovered coefficien
 fit at 14.30 mΩ and the electrical regression of terminal voltage on current at 14.49 mΩ, which
 agree with each other to 1.3 per cent and disagree with the network's 13.05 mΩ by about 9 per cent.
 
-The difficulty is in the residual column. Selecting the weight by the lowest equation residual —
-the truth-free criterion this project requires, precisely so that selection cannot see the answer —
-picks $w_\mathrm{data} = 5$, which yields **1.05 K and would have failed** the pre-registered
-target. The reported value used 200, fixed before any core scoring and never revised, which happens
-to sit near the core-error minimum. That is a fortunate choice, not a defensible method, and it is
-recorded as such. Chapter 5's synthetic sweep had independently found 20 to be optimal and 200
-markedly worse on a different problem, which sharpens rather than softens the point.
+The difficulty is in the residual column. Selecting the weight by the lowest equation residual, the
+truth-free criterion this project requires precisely so that selection cannot see the answer, picks
+$w_\mathrm{data} = 5$, which yields **1.05 K and would have failed** the pre-registered target. The
+reported value used 200, fixed before any core scoring and never revised, which happens to sit near
+the core-error minimum. That is a fortunate choice, not a defensible method, and it is recorded as
+such. Chapter 5's synthetic sweep had independently found 20 optimal and 200 markedly worse on a
+different problem, which sharpens the point rather than softening it.
 
 ### 6.6.2 Scoring against trivial baselines
 
@@ -399,8 +398,8 @@ of the radial profile does not change; only its amplitude does. One number there
 entire spatial structure, and a transient solver has nothing left to contribute.
 
 Those measured ratios are to be compared with $\mathrm{Bi}/2 = 0.6071$ and $0.5744$ from Table 6.2,
-agreeing to 1.5 and 7.6 per cent — obtained, it is worth repeating, from fits on the other record
-with no core data anywhere in the chain.
+agreeing to 1.5 and 7.6 per cent. Both came from fits on the other record, with no core data
+anywhere in the chain.
 
 There is a second, reinforcing reason, and the two should not be conflated. The relation **never
 references the volumetric source**. Estimators A and B must both recover $R_\mathrm{eff}$ and then
@@ -411,8 +410,8 @@ temperature at every instant, which is the quantity the source would have been u
 That second reason invites an obvious objection: the algebraic relation is anchored on the measured
 surface at every step, while the network re-predicts the surface and therefore inherits its own
 surface error. If that were the whole story the comparison would be unfair. It was tested.
-Removing the network's surface error — taking only its predicted *gradient* and adding it to the
-measured surface — gives **0.5990 K**, against the relation's 0.1409 K. Anchoring is not what
+Removing the network's surface error, by taking only its predicted *gradient* and adding it to the
+measured surface, gives **0.5990 K** against the relation's 0.1409 K. Anchoring is not what
 separates them. The same test applied to the classical estimator gives 0.5622 K. The gap lives in
 the gradient itself.
 
@@ -456,10 +455,10 @@ between records or luck, and two records cannot distinguish the two possibilitie
 
 For completeness, switching on the reversible term with the published lithium iron phosphate
 entropy coefficient of −0.5 mV K⁻¹ at 50 per cent state of charge **(a)** [2] moves the core RMSE
-from 0.8895 K to 0.8927 K, a 0.4 per cent change. The instantaneous reversible heat is not small —
-its mean absolute value is 57 to 63 per cent of the mean ohmic heat — but it alternates with charge
-and discharge, so its signed mean is only −1.4 per cent and its effect on the thermal prediction is
-immaterial on this duty cycle **(c)**.
+from 0.8895 K to 0.8927 K, a 0.4 per cent change. The instantaneous reversible heat is not small:
+its mean absolute value is 57 to 63 per cent of the mean ohmic heat. But it alternates with charge
+and discharge, so its signed mean is only −1.4 per cent, and its effect on the thermal prediction
+is immaterial on this duty cycle **(c)**.
 
 ---
 

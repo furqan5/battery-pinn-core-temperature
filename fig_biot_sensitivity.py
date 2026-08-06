@@ -41,8 +41,11 @@ l1, = ax.plot(ks, surf, "o-", color="#1565c0", ms=3.5, lw=1.4,
 l2, = ax2.plot(ks, core, "s-", color="#c62828", ms=3.5, lw=1.4,
                label="core RMSE (what we want)")
 ax.axvline(K_FIXED, color="#2e7d32", lw=1.0, ls="--")
-ax.text(K_FIXED + 0.006, ax.get_ylim()[1] * 0.97, "k used\n(leak-free)",
-        fontsize=6.5, color="#2e7d32", va="top")
+# annotation goes at the BOTTOM; the legend occupies the top of the axes and the
+# two collided in the first compiled proof.
+ylo, yhi = ax.get_ylim()
+ax.text(K_FIXED + 0.007, ylo + 0.04 * (yhi - ylo), "$k$ used\n(leak-free)",
+        fontsize=6.5, color="#2e7d32", va="bottom")
 
 ax.set_xlabel(r"radial conductivity $k$  /  W m$^{-1}$K$^{-1}$")
 ax.set_ylabel("surface RMSE  /  K", color="#1565c0")
