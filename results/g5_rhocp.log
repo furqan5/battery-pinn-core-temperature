@@ -1,0 +1,49 @@
+﻿============================================================================================
+G-5: sensitivity of every reported result to the assumed rho*cp
+============================================================================================
+  cell volume V_b = 3.42190e-05 m^3
+  Richardson (rho=2107)      rho*cp = 2.4686e+06 J/m^3/K   implied mass 72.10 g   C_lump 84.47 J/K
+  datasheet mass 70 g        rho*cp = 2.3967e+06 J/m^3/K   implied mass 70.00 g   C_lump 82.01 J/K
+  spread: +3.00 %
+
+--------------------------------------------------------------------------------------------
+  DATASET 2   Bi = 1.2142
+--------------------------------------------------------------------------------------------
+    QUASI-STEADY relation core RMSE = 0.1409 K
+      -> rho*cp does not appear in T_surf + (Bi/2)(T_surf - T_inf).
+         The headline result is INDEPENDENT of this assumption.
+    rho*cp source               R_eff mOhm  surf RMSE  core RMSE  tau_diff s
+    Richardson (rho=2107)          14.3009     0.4652     0.8943        1043
+    datasheet mass 70 g            14.2414     0.4346     0.8300        1013
+
+--------------------------------------------------------------------------------------------
+  DATASET 1   Bi = 1.1487
+--------------------------------------------------------------------------------------------
+    QUASI-STEADY relation core RMSE = 0.3366 K
+      -> rho*cp does not appear in T_surf + (Bi/2)(T_surf - T_inf).
+         The headline result is INDEPENDENT of this assumption.
+    rho*cp source               R_eff mOhm  surf RMSE  core RMSE  tau_diff s
+    Richardson (rho=2107)          13.6493     0.5613     1.0544         981
+    datasheet mass 70 g            13.6088     0.5435     1.0121         953
+
+============================================================================================
+  EFFECT ON THE TIMESCALE CRITERION
+============================================================================================
+    tau_diff: 1017 s (Richardson) vs 987 s (datasheet), -2.91 %
+    The criterion is eps = 7.48 (t/tau)^-1.18. A -2.91 %
+    shift in tau moves every plotted ratio by the same factor, so the
+    FITTED EXPONENT IS UNCHANGED and the crossings move by that amount:
+        2.0 % error at t/tau = 3.49 -> 3.59 under the datasheet value
+        5.0 % error at t/tau = 1.37 -> 1.41 under the datasheet value
+       10.0 % error at t/tau = 0.77 -> 0.79 under the datasheet value
+       25.0 % error at t/tau = 0.37 -> 0.38 under the datasheet value
+
+============================================================================================
+  INDEPENDENT ANCHOR FROM THE SAME DATASHEET
+============================================================================================
+    datasheet internal impedance (1 kHz AC, 25 C): 8 mOhm typical
+    electrical regression of V on I, this work:    13.87 mOhm (DS1), 14.49 mOhm (DS2), DC at 8 C
+    recovered R_eff, classical:                    14.30 mOhm (DS2)
+    A 1 kHz AC value excludes charge-transfer and diffusion and is taken
+    at 25 C, so it must sit BELOW a DC value at 8 C. It does, by ~1.8x.
+    Consistent, and a third independent check on the absolute scale.

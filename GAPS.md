@@ -71,22 +71,60 @@ provisional. Chapter 6 carries a banner saying so.
 
 ## Tier 2 — affects specific numbers
 
-### G-4. Reference metadata taken from code archives, not articles
-Richardson & Howey (2015) and Forgez et al. (2010) are cited from the README and readme-text of the
-code releases that use them, not from the publisher record.
+### G-4. Reference metadata verified against the publisher record — **RESOLVED**
+Every reference in both manuscripts was checked against the publisher's own record on 6 Aug 2026.
+One carried a wrong title and several were incomplete:
 
-`[VERIFY: page numbers, volume, DOI for both]`
+| Reference | Correction |
+|---|---|
+| **perez2012** | **The published title contains "cylindrical"** — the source archive's readme omits it. Added pp. 41–50, paper DSCC2012-MOVIC2012-8782, venue detail, doi 10.1115/DSCC2012-MOVIC2012-8782 |
+| **lin2013** | Vol. 21, no. 5, pp. 1745–1755, Sep. 2013 and the full eight-author list were all missing |
+| **catenaro2021** | Companion article was not cited: *Data in Brief* **35**, art. 106894, doi 10.1016/j.dib.2021.106894 — verified to reference Mendeley `kxsbr4x3j2` specifically, and it lists exactly the eight LFP C-rates used here |
+| richardson2015 | doi 10.1109/TSTE.2015.2420375 added |
+| forgez2010 | doi 10.1016/j.jpowsour.2009.10.105 added |
+| bernardi1985 | already correct |
+| saha2007 | repository entry, no DOI issued |
 
-### G-5. Cell mass discrepancy, ~5 %
-The manufacturer sheet inside the previously unused multi-rate dataset gives **0.076 kg** for the
-A123 ANR26650m1-b. Part 7 uses ρ = 2107 kg m⁻³ with V = 3.4219×10⁻⁵ m³, implying **72.1 g** — 5.1 %
-lower. ρc_p propagates directly into every recovered coefficient.
+Applied to both manuscripts by `fix_references.py`; citation order re-verified as IEEE-compliant
+and both recompiled clean.
 
-**To close:** decide which mass applies to the Richardson cell (2.3 Ah variant) versus the
-multi-rate cell (2.5 Ah "-b" variant) and state the assumption. This is cheap and converts part of
-ρc_p from **(b)** toward **(a)**.
+### G-5. Cell mass — **RESOLVED, and the flagged discrepancy was an error of mine**
+I compared Richardson's cell against the wrong datasheet. The 76 g figure belongs to the
+**ANR26650M1-B** (2.6 Ah), a later variant, which is the cell in the multi-rate dataset.
+Richardson's data is on the **ANR26650M1**, whose manufacturer datasheet gives:
 
-`[VERIFY: mass and capacity of the exact cell in the Richardson archive]`
+```
+Nominal capacity and voltage      2.3 Ah, 3.3 V
+Internal impedance (1kHz AC)      8 mOhm typical
+Core cell weight                  70 grams
+```
+
+Against the correct figure, Richardson's ρ×V = **72.10 g is +3.0 %**, not −5.1 %, which is what an
+*effective* bulk density for a thermal model should look like. There is no discrepancy.
+
+**Sensitivity quantified anyway** (`g5_rhocp_sensitivity.py`, `results/g5_rhocp.log`), because
+ρc_p is assumed either way:
+
+| | Richardson (72.10 g) | datasheet (70.00 g) | change |
+|---|---|---|---|
+| **Quasi-steady core RMSE** | **0.1409 / 0.3366 K** | **identical** | **none** — ρc_p is absent from the relation |
+| Classical R_eff (DS2) | 14.3009 mΩ | 14.2414 mΩ | 0.4 % |
+| Classical core RMSE (DS2) | 0.8943 K | 0.8300 K | 7 % |
+| τ_diff | 1017 s | 987 s | −2.9 % |
+| Criterion exponent | −1.18 | **unchanged** | — |
+| 5 % crossing | t/τ = 1.37 | t/τ = 1.41 | 2.9 % |
+
+**No reported conclusion changes.** The headline is structurally immune because ρc_p does not
+appear in the quasi-steady relation, and the criterion's exponent is unaffected because a uniform
+shift in τ moves every plotted point together.
+
+**A third independent anchor fell out of it.** The same datasheet gives 8 mΩ at 1 kHz, 25 °C. That
+excludes charge-transfer and diffusion and is taken at 25 °C, so it must sit *below* a DC value at
+8 °C — and it does, by about 1.8× against the recovered 14.30 mΩ. Now cited in the paper.
+
+### G-7. A123 datasheet — **RESOLVED**
+Consulted directly and now cited as `\bibitem{a123ds}` in the manuscript. Supplies nominal
+capacity, core cell weight and 1 kHz impedance, all used above.
 
 ### G-6. "B0005 @ 24 °C stratum" is a nominal label
 The `.mat` mirror carries no `metadata.csv`; the notebook prints "No metadata — cannot stratify".
@@ -95,11 +133,7 @@ No number changes, but the description must be accurate.
 
 `[VERIFY: whether all B0005 cycles are at 24 °C nominal — the CSV mirror's metadata would settle it]`
 
-### G-7. A123 datasheet not consulted directly
-Nominal capacity, DC resistance and dimensions come from the Richardson archive and the multi-rate
-dataset's summary sheet, not the manufacturer document.
-
-`[VERIFY: A123 ANR26650M1 / -B datasheet]`
+*(G-7 resolved — moved up beside G-5, which it settled.)*
 
 ---
 
