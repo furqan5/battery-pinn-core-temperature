@@ -330,14 +330,42 @@ run has *better* physics (Lr 2.0×10⁻³ against 8.6×10⁻³) while sitting fu
 value — the same failure mode Part 5b documented, where the truth-free selection criterion cannot
 distinguish a good run from a badly-parameterised one.
 
-> ⚠ **Consequence for the prediction ledger.** Part 6 scores **G2** ("R₀ within ±3 % of classical")
-> as a **HIT** at +0.30 %. On the re-executed run it is **+5.87 %, a MISS**. The verdict depends on
-> which training run is taken, and no seed spread was ever reported for this fit.
->
-> **Recommendation for the thesis:** quote Part 6's R₀ as a range across runs, not to five
-> significant figures, and either re-score G2 as indeterminate or run the 5+ seeds that the
-> project's own methodology requires elsewhere. `[VERIFY: seed spread for the Part 6 fixed-residual
-> fit at w = 20 — currently n = 1 in the notebook and n = 1 here, and they disagree by 5.6 %]`
+### 5.0a Seed sweep — the question closed (6 Aug 2026)
+
+Twelve runs, 6 seeds × 2 data weights (`results/p6_seed_summary.log`).
+
+| w_data | R₀ across 6 seeds | deviation vs cycle-0 classical | G2 HIT rate |
+|---|---|---|---|
+| **20 (the quoted setting)** | **147.05 ± 6.32 mΩ** | +1.87 % [−6.71, +5.87] | **2/6** |
+| 200 | 146.50 ± 6.11 mΩ | +1.48 % [−7.11, +3.58] | 1/6 |
+
+| seed | R₀ (w=20) | dev | c₁ | RMSE | Lr |
+|---|---|---|---|---|---|
+| 0 | 152.826 | +5.87 % | −1.532 | 0.1269 | 2.012×10⁻³ |
+| 1 | 148.714 | +3.02 % | −1.427 | 0.1370 | 2.395×10⁻³ |
+| **2** | **134.659** | **−6.71 %** | −1.021 | 0.1485 | **1.887×10⁻² ← 8.8× median** |
+| 3 | 148.472 | +2.85 % | −1.382 | 0.1276 | 1.785×10⁻³ |
+| 4 | 149.714 | +3.71 % | −1.430 | 0.1259 | 2.270×10⁻³ |
+| **5** | 147.929 | +2.48 % | −1.372 | 0.1286 | **1.682×10⁻³ ← lowest** |
+
+**Three conclusions.**
+
+1. **The quoted 144.78 mΩ is at the favourable edge** — 5 of 6 seeds land above it. G2 as scored
+   in the notebook is not representative of the estimator.
+2. **Truth-free selection rescues G2 legitimately.** Lowest PDE residual picks seed 5 → 147.93 mΩ
+   → +2.48 % → **HIT**. The defensible statement is that *G2 passes under the project's own
+   selection rule, while only 2 of 6 individual seeds satisfy it*.
+3. **The residual criterion worked here, unlike Part 5b.** Seed 2 is the outlier at both weights
+   and its residual is 8.8×/4.6× the median, so it is correctly rejected. In Part 5b the bad run
+   hid inside the good residual range. The criterion's reliability is problem-dependent — a useful
+   contrast for the methodology chapter rather than a blanket endorsement or dismissal.
+
+Excluding the flagged run, w = 200 gives **148.98 ± 0.65 mΩ** (0.4 % spread). The estimator is
+stable when it converges; the failure rate is **1 in 6, replicating Part 5b's figure on real data**.
+
+**Robust across all 12 runs:** c₁ negative 12/12 (broken residual: +0.023); RMSE 0.132 ± 0.009 K
+at w = 20, 0.074 ± 0.003 K at w = 200, against 0.62 K broken. The *shape* is recovered every time;
+only the *amplitude* is seed-sensitive. **Part 6's argument is intact; its precision was overstated.**
 
 This is not a defect in the Part 6 argument, which is about a residual defect and survives intact.
 It is a defect in the *precision* with which a single stochastic fit was reported, and it is

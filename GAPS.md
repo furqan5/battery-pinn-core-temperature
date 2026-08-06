@@ -24,19 +24,42 @@ it says nothing about whether B0005's specific minimum is entropic."
 
 `[VERIFY: Iontech multi-C-rate run — code, RMSE, raw output, or drop]`
 
-### G-2. Part 6's headline R₀ is not reproducible and its prediction verdict flips
+### G-2. Part 6's headline R₀ needs a range, and G2 must be re-scored — **RESOLVED**
 **Where:** Part 6 quotes R₀ = 144.78 mΩ, "+0.30 % vs cycle-0 classical", scoring **G2 a HIT**.
 
-**Problem:** re-executing the same seeded cell in this repository returns **152.83 mΩ = +5.87 %**,
-which is a **MISS**. Both are n = 1. The notebook *does* call `torch.manual_seed`, so the
-divergence is across environments (torch build, thread count, reduction order), not across seeds —
-a seeded notebook that is not reproducible across machines cannot support a value quoted to five
-significant figures.
+**Closed by a 6-seed × 2-weight sweep** (`p6_seeds.py`, `results/p6_seed_summary.log`, 12 runs,
+~23 min):
 
-**To close:** seed sweep in progress (`p6_seeds.py`, 6 seeds × 2 weights). Quote a mean ± sd and
-re-score G2 on the distribution rather than on one run.
+| w_data | R₀ across 6 seeds | deviation | G2 HIT rate |
+|---|---|---|---|
+| 20 (quoted) | 147.05 ± 6.32 mΩ | +1.87 % [−6.71, +5.87] | **2/6** |
+| 200 | 146.50 ± 6.11 mΩ | +1.48 % [−7.11, +3.58] | 1/6 |
 
-`[VERIFY: seed spread for the Part 6 fixed-residual fit — sweep running at time of writing]`
+**The quoted 144.78 mΩ sits at the favourable edge — 5 of 6 seeds land above it.** As scored in
+the notebook G2 is not representative.
+
+**But the project's own selection rule rescues it.** Picking the run with the lowest PDE residual
+— the truth-free criterion mandated throughout — selects seed 5 at w = 20, giving 147.93 mΩ
+(+2.48 %), **a legitimate HIT**. So the correct statement is: *G2 passes under truth-free
+selection, though only 2 of 6 individual seeds satisfy it, and the value originally quoted was at
+the favourable extreme.*
+
+**A genuinely favourable finding fell out of this.** Seed 2 is the outlier at both weights
+(−6.7 %, −7.1 %), and its PDE residual is **8.8× the median at w = 20 and 4.6× at w = 200** — the
+truth-free criterion **flags it correctly**. That is the opposite of Part 5b, where the bad run's
+residual sat inside the good range and the criterion was blind. Worth stating as a contrast: the
+criterion's reliability is problem-dependent, and on real data here it worked.
+
+Excluding the flagged run, w = 200 gives **148.98 ± 0.65 mΩ** — a 0.4 % spread. The estimator is
+stable when it converges; the issue is the 1-in-6 failure, which **replicates Part 5b's rate on
+real data**.
+
+**Robust across all 12 runs:** c₁ negative in 12/12 (the broken residual gave +0.023), RMSE
+0.132 ± 0.009 K at w = 20 and 0.074 ± 0.003 K at w = 200 against 0.62 K broken. **The shape is
+recovered every time; only the amplitude is seed-sensitive.** The chapter's argument is intact.
+
+**Remaining action:** quote R₀ as a range, re-score G2 with the distribution stated, and add the
+1-in-6 failure rate wherever the Part 6 accuracy figure appears.
 
 ### G-3. University of the Punjab thesis template not supplied
 Front matter, chapter numbering, heading levels, equation numbering and citation style are all

@@ -1,0 +1,56 @@
+﻿================================================================================================
+PART 6 SEED SWEEP — how stable is the fixed-residual fit?
+================================================================================================
+  comparator: cycle-0 classical R0 = 144.352 mOhm, c1 = -1.305
+  Part 6 quotes 144.78 mOhm (+0.30 %) and scores G2 a HIT on it.
+
+------------------------------------------------------------------------------------------------
+  w_data = 20
+------------------------------------------------------------------------------------------------
+     seed   R0 mOhm    dev %       c1   RMSE K          Lr     G2
+        0   152.826    +5.87   -1.532   0.1269   2.012e-03   MISS
+        1   148.714    +3.02   -1.427   0.1370   2.395e-03   MISS
+        2   134.659    -6.71   -1.021   0.1485   1.887e-02   MISS
+        3   148.472    +2.85   -1.382   0.1276   1.785e-03    HIT
+        4   149.714    +3.71   -1.430   0.1259   2.270e-03   MISS
+        5   147.929    +2.48   -1.372   0.1286   1.682e-03    HIT
+    all 6 : R0 147.053 +/- 6.317 mOhm (range 134.659-152.826, spread 18.166)
+            deviation +1.87 % [-6.71, +5.87]
+    G2 (|dev| <= 3 %) scores HIT on 2/6 seeds
+    TRUTH-FREE PICK (lowest Lr): seed 5 -> R0 147.929 mOhm (+2.48 %) -> G2 HIT
+    worst-parameter seed is 2 (-6.71 %); its Lr is 1.887e-02, 8.8x the median -> FLAGGED by the residual
+    excluding it: R0 149.531 +/- 1.952 mOhm (+3.59 % +/- 1.35)
+    c1 all negative: True   mean -1.361 +/- 0.176
+    RMSE 0.1324 +/- 0.0088 K
+
+------------------------------------------------------------------------------------------------
+  w_data = 200
+------------------------------------------------------------------------------------------------
+     seed   R0 mOhm    dev %       c1   RMSE K          Lr     G2
+        0   149.058    +3.26   -1.416   0.0704   5.486e-03   MISS
+        1   147.868    +2.44   -1.412   0.0695   1.247e-02    HIT
+        2   134.084    -7.11   -0.993   0.0772   3.497e-02   MISS
+        3   149.311    +3.44   -1.442   0.0747   8.866e-03   MISS
+        4   149.519    +3.58   -1.440   0.0764   6.498e-03   MISS
+        5   149.131    +3.31   -1.419   0.0729   3.547e-03   MISS
+    all 6 : R0 146.495 +/- 6.108 mOhm (range 134.084-149.519, spread 15.435)
+            deviation +1.48 % [-7.11, +3.58]
+    G2 (|dev| <= 3 %) scores HIT on 1/6 seeds
+    TRUTH-FREE PICK (lowest Lr): seed 5 -> R0 149.131 mOhm (+3.31 %) -> G2 MISS
+    worst-parameter seed is 2 (-7.11 %); its Lr is 3.497e-02, 4.6x the median -> FLAGGED by the residual
+    excluding it: R0 148.977 +/- 0.645 mOhm (+3.20 % +/- 0.45)
+    c1 all negative: True   mean -1.354 +/- 0.177
+    RMSE 0.0735 +/- 0.0032 K
+
+================================================================================================
+VERDICT
+================================================================================================
+  The quoted 144.78 mOhm sits at the favourable edge of the distribution:
+  1/6 seeds fall below it, 5/6 above.
+  G2 as scored in the notebook (HIT at +0.30 %) is not representative;
+  it scores HIT on 2/6 seeds.
+
+  What DOES hold across every seed:
+    - c1 is negative in 12/12 runs (the broken residual gave +0.023)
+    - RMSE ~0.13 K at w=20 and ~0.07 K at w=200, against 0.62 K broken
+    - the shape is recovered; only the AMPLITUDE is seed-sensitive

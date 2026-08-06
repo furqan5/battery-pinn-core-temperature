@@ -13,3 +13,113 @@ At line:1 char:369
 [IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) 
 is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned 
 CurveZMQ keys to enable transport encryption.
+Traceback (most recent call last):
+  File "C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn\p6_seeds.py", line 95, in <module>
+    client.execute()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Users\Nouman\AppData\Roaming\Python\Python314\site-packages\jupyter_core\utils\__init__.py", line 165, in 
+wrapped
+    return loop.run_until_complete(inner)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Python314\Lib\asyncio\base_events.py", line 719, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Nouman\AppData\Roaming\Python\Python314\site-packages\nbclient\client.py", line 709, in async_execute
+    await self.async_execute_cell(
+        cell, index, execution_count=self.code_cells_executed + 1
+    )
+  File "C:\Users\Nouman\AppData\Roaming\Python\Python314\site-packages\nbclient\client.py", line 1062, in 
+async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "C:\Users\Nouman\AppData\Roaming\Python\Python314\site-packages\nbclient\client.py", line 918, in 
+_check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+
+import numpy as _np, json as _json, time as _t
+_res = []
+for _w in [20.0, 200.0]:
+    for _s in range(6):
+        _t0 = _t.time()
+        _r = train_real_I(P, seed=_s, wd2=_w)
+        _r["w_data"] = _w; _r["seed"] = _s; _r["wall"] = _t.time() - _t0
+        _res.append(_r)
+        print(f"w={_w:6.0f} seed={_s}  R0={_r['R0_mOhm']:8.3f} mOhm  "
+              f"c1={_r['c1']:+7.3f}  c2={_r['c2']:+7.3f}  "
+              f"RMSE={_r['rmse']:.4f}  Lr={_r['Lr']:.3e}  "
+              f"[{_r['wall']:.0f} s]", flush=True)
+open(r"C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn\results\p6_seeds.json", "w").write(_json.dumps(_res))
+
+_target = c0f["R0_mOhm"]
+print()
+print("=" * 92)
+print(f"CYCLE-0 CLASSICAL TARGET: R0 = {_target:.3f} mOhm, c1 = {c0f['c1']:.3f}, "
+      f"c2 = {c0f['c2']:.3f}, RMSE = {c0f['rmse']:.4f} K")
+print("=" * 92)
+for _w in [20.0, 200.0]:
+    _g = [r for r in _res if r["w_data"] == _w]
+    _R = _np.array([r["R0_mOhm"] for r in _g])
+    _c1 = _np.array([r["c1"] for r in _g])
+    _rm = _np.array([r["rmse"] for r in _g])
+    _dev = 100 * (_R - _target) / _target
+    print(f"\n  w_data = {_w:.0f}   n = {len(_g)}")
+    print(f"    R0    mean {_R.mean():8.3f}  sd {_R.std(ddof=1):6.3f}  "
+          f"min {_R.min():8.3f}  max {_R.max():8.3f}  spread {_R.ptp():6.3f} mOhm")
+    print(f"    vs classical: mean {_dev.mean():+6.2f} %  range "
+          f"[{_dev.min():+6.2f}, {_dev.max():+6.2f}] %")
+    print(f"    c1    mean {_c1.mean():+7.3f}  sd {_c1.std(ddof=1):6.3f}  "
+          f"(all negative: {bool((_c1 < 0).all())})")
+    print(f"    RMSE  mean {_rm.mean():7.4f}  sd {_rm.std(ddof=1):6.4f}")
+    _hit = _np.abs(_dev) <= 3.0
+    print(f"    G2 (|dev| <= 3 %%): {int(_hit.sum())}/{len(_g)} seeds would score HIT")
+
+------------------
+
+----- stdout -----
+w=    20 seed=0  R0= 152.826 mOhm  c1= -1.532  c2= +2.141  RMSE=0.1269  Lr=2.012e-03  [121 s]
+----- stdout -----
+w=    20 seed=1  R0= 148.714 mOhm  c1= -1.427  c2= +2.055  RMSE=0.1370  Lr=2.395e-03  [121 s]
+----- stdout -----
+w=    20 seed=2  R0= 134.659 mOhm  c1= -1.021  c2= +1.731  RMSE=0.1485  Lr=1.887e-02  [122 s]
+----- stdout -----
+w=    20 seed=3  R0= 148.472 mOhm  c1= -1.382  c2= +1.996  RMSE=0.1276  Lr=1.785e-03  [116 s]
+----- stdout -----
+w=    20 seed=4  R0= 149.714 mOhm  c1= -1.430  c2= +2.045  RMSE=0.1259  Lr=2.270e-03  [114 s]
+----- stdout -----
+w=    20 seed=5  R0= 147.929 mOhm  c1= -1.372  c2= +1.991  RMSE=0.1286  Lr=1.682e-03  [113 s]
+----- stdout -----
+w=   200 seed=0  R0= 149.058 mOhm  c1= -1.416  c2= +2.040  RMSE=0.0704  Lr=5.486e-03  [114 s]
+----- stdout -----
+w=   200 seed=1  R0= 147.868 mOhm  c1= -1.412  c2= +2.048  RMSE=0.0695  Lr=1.247e-02  [113 s]
+----- stdout -----
+w=   200 seed=2  R0= 134.084 mOhm  c1= -0.993  c2= +1.715  RMSE=0.0772  Lr=3.497e-02  [115 s]
+----- stdout -----
+w=   200 seed=3  R0= 149.311 mOhm  c1= -1.442  c2= +2.072  RMSE=0.0747  Lr=8.866e-03  [113 s]
+----- stdout -----
+w=   200 seed=4  R0= 149.519 mOhm  c1= -1.440  c2= +2.066  RMSE=0.0764  Lr=6.498e-03  [114 s]
+----- stdout -----
+w=   200 seed=5  R0= 149.131 mOhm  c1= -1.419  c2= +2.045  RMSE=0.0729  Lr=3.547e-03  [113 s]
+----- stdout -----
+
+============================================================================================
+CYCLE-0 CLASSICAL TARGET: R0 = 144.352 mOhm, c1 = -1.305, c2 = 1.934, RMSE = 0.1297 K
+============================================================================================
+
+  w_data = 20   n = 6
+------------------
+
+[31m---------------------------------------------------------------------------[39m
+[31mAttributeError[39m                            Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[10][39m[32m, line 29[39m
+[32m     25[39m     _rm = _np.array([r[[33m"rmse"[39m] [38;5;28;01mfor[39;00m r [38;5;28;01min[39;00m _g])
+[32m     26[39m     _dev = [32m100[39m * (_R - _target) / _target
+[32m     27[39m     print(f"\n  w_data = {_w:.0f}   n = {len(_g)}")
+[32m     28[39m     print(f"    R0    mean {_R.mean():8.3f}  sd {_R.std(ddof=1):6.3f}  "
+[32m---> [39m[32m29[39m           f"min {_R.min():8.3f}  max {_R.max():8.3f}  spread {_R.ptp():6.3f} mOhm")
+[32m     30[39m     print(f"    vs classical: mean {_dev.mean():+6.2f} %  range "
+[32m     31[39m           f"[{_dev.min():+6.2f}, {_dev.max():+6.2f}] %")
+[32m     32[39m     print(f"    c1    mean {_c1.mean():+7.3f}  sd {_c1.std(ddof=1):6.3f}  "
+
+[31mAttributeError[39m: 'numpy.ndarray' object has no attribute 'ptp'
+
