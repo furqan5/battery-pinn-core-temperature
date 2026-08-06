@@ -25,7 +25,7 @@ over a one-line algebraic relation, and a month went into an estimator the
 physics did not require. The lesson was that identifiability must be checked in
 the actual regime before anything is built. This notebook applies that lesson.
 
-**Runtime** roughly 12 minutes on a 6-core CPU laptop. No GPU. Nothing is fitted.
+**Runtime** about 6 minutes on a 6-core CPU laptop. No GPU. Nothing is fitted.
 
 ---
 
@@ -122,7 +122,7 @@ convergence in dx / dt / mushy width, global energy closure, and latent closure.
 code("""
 import pcm_stage_a_verify as A
 A.a1_stefan_schemes()
-A.a2_convergence()
+_ = A.a2_convergence()
 """)
 
 md(r"""
@@ -134,7 +134,7 @@ solution **is** the ΔT_m → 0 limit.
 
 code("""
 A.a3_energy_closure()
-A.a4_cross_scheme()
+_ = A.a4_cross_scheme()
 """)
 
 md(r"""
@@ -198,7 +198,7 @@ sensor is a reason to look for a leak, not to celebrate. Four audits:
 
 code("""
 import pcm_stage_b_audit as AUD
-AUD.l1_history_leak()
+_ = AUD.l1_history_leak()
 """)
 
 code("""
@@ -293,7 +293,7 @@ rows = E.e1_regime_sweep()
 
 code("""
 E.e2_k_ratio()
-E.e3_mushy_width()
+_ = E.e3_mushy_width()
 """)
 
 md(r"""

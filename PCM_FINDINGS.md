@@ -11,14 +11,19 @@ rewritten around.
 
 ---
 
-## 1. Verdict, in the language of §5
+## 1. Verdict, in the language of the brief's decision thresholds
 
-The §5 thresholds for the **strongest** outcome are met on the numbers:
+*(References to "the brief's §5" below mean the three decision outcomes in the
+session brief, not section 5 of this document.)*
+
+The brief's thresholds for the **strongest** outcome are met on the numbers:
 S1 standard deviation 0.10 % of the full buffer (threshold < 10 %), and
 three-case discrimination at 7.5× the sensor noise (threshold > 3×).
 
-**But the mechanism is not the one the proposal claims, and by mechanism this
-is the second outcome: identifiable by integration, not by front tracking.**
+**But the mechanism is not the one the proposal claims, and by mechanism this is
+the brief's second outcome: identifiable by integration, not by front
+tracking — so the deck's melt-front-tracking language must change before the
+meeting.**
 
 Melted fraction is recoverable because it is a monotone function of the net heat
 the cell has accumulated, and accumulated heat shows up in the surface
@@ -232,7 +237,43 @@ to 2 K the separation is flat at 0.69 K.
 
 ---
 
-## 7. What I would do with the twelve months
+## 7. Limitations — what could still overturn this
+
+**Natural convection in the molten PCM is the real one, and it was tested.**
+A 1-D model cannot carry buoyancy-driven flow in the liquid region, which in a
+real melting paraffin raises effective heat transfer substantially. The standard
+proxy is an enhanced conductivity in the liquid only, and it is the one direction
+the E2 sweep did not cover (E2 went *downward*, k_l/k_s = 0.5–1.0). Running it
+upward:
+
+| k_liquid/k_solid | 1 (molecular) | 2 | 3 | 5 | 10 |
+|---|---|---|---|---|---|
+| buffer sd (% of buffer) | 0.102 | 0.083 | 0.078 | 0.081 | 0.089 |
+| worst separation (K) | 0.751 | 0.931 | 1.052 | 1.012 | 0.922 |
+
+Convective enhancement helps modestly and **non-monotonically**, peaking near
+k_l/k_s ≈ 3, and at best moves the separation from 0.75 K to 1.05 K and the bound
+from 0.102 % to 0.078 %. Same order of magnitude, same conclusion. It does not
+rescue front tracking. (`results/pcm_convection_check.json`.)
+
+Remaining limitations, none of which were tested:
+
+- **1-D radial.** No axial gradient, no tab heating, no end effects. The in-plane
+  tab-heat localisation idea in the proposal is a genuinely different problem and
+  nothing here speaks to it either way.
+- **Constant density.** No volume change on melting. The real 880 → 760 kg/m³
+  contraction is what drives the convection above and also causes void formation
+  at the can wall, which would change the contact resistance — plausibly a larger
+  effect than anything modelled here, and not capturable in 1-D.
+- **Sustained constant heat load.** Represents repeated cycling at an average
+  dissipation, not a single 3C discharge (which lasts only 20 minutes and would
+  not melt the PCM on its own).
+- **Model assumed exact, noise assumed white.** The L2 audit quantifies how much
+  this flatters the result; it is the largest single caveat on the headline number.
+
+---
+
+## 8. What I would do with the twelve months
 
 Not a deliverable, but it follows directly and you will be asked.
 
