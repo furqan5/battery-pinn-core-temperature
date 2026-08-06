@@ -504,10 +504,19 @@ where it performs best, and its success depends on a weighting that the project'
 selection rule would have chosen badly.
 
 The mechanism is quasi-steadiness: the radial profile shape is constant to about 2 per cent across
-both records, so one dimensionless number captures the spatial structure. Chapter 7 generalises
-this into a criterion for when a transient inverse solver earns its place, and identifies the
-regime — forcing timescales approaching the ~1000 s diffusion time — where the criterion predicts
-that it would.
+both records, so one dimensionless number captures the spatial structure.
+
+That raises the question this chapter cannot answer from two drive cycles alone — whether
+quasi-steadiness is a property of this cell or of this *duty cycle*. Chapter 7 settles it on an
+independent multi-rate dataset covering the same cell family across eight discharge rates, and
+finds the answer is a timescale criterion: the quasi-steady error follows
+
+$$\varepsilon \approx 7.5\,\left(\frac{t_\mathrm{forcing}}{\tau_\mathrm{diff}}\right)^{-1.18}
+\ \ \text{per cent}, \qquad r^2 = 0.996,$$
+
+crossing 5 per cent at a timescale ratio of 1.4 and 25 per cent at 0.37. The drive cycles analysed
+here sit at a ratio of 3.4, comfortably inside the quasi-steady regime — which is why the algebraic
+relation wins on this data, and where it would stop winning.
 
 ---
 
