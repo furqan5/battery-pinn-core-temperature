@@ -6,7 +6,64 @@ Collected 6 Aug 2026. Ordered by how much damage each would do if an examiner fo
 
 ## Tier 1 — must be resolved before submission
 
-### G-1. The reversible-heat claim has no verifiable source
+### G-1. The reversible-heat claim — **CLOSED, and the claim is NOT supported**
+
+**Done:** the separation was implemented, run on LCO, and its RMSE reported. Code:
+`g1_survey_currents.py`, `g1_inspect_multirate.py`, `g1_entropic_separation.py`, `g1_run.py`,
+`g1_figure.py`. Output: `results/g1_separation.log`, `results/g1_separation.npz`,
+`figures/g1_separation.png`.
+
+**The data that made it possible.** MANIFEST.md said the question needed "an LCO entropy-profile
+subtraction or a same-chemistry replication", and that LFP could not test an LCO hypothesis. It
+can be done: the NASA archive contains LCO cells cycled at **1, 2 and 4 A within one cell at one
+ambient** — B0038/B0039/B0040 at 44 °C. Same chemistry as B0005.
+
+**Method, which assumes no source shape at all.** With discharge-positive current,
+Q/I = I·R(x) − T·(dU/dT)(x), so at fixed x a plot of Q/I against I has slope R and intercept
+−T·dU/dT. Q itself comes from the lumped balance Q = C·dT/dt + K(T − T_amb) by direct
+differentiation, and K comes from 60 post-discharge relaxation tails where the source is off
+(τ = 800 s, K = 0.05684 W/K). Nothing is fitted to a heat-generation model.
+
+**The number that was never reported.** Median linear-fit RMSE **0.01249 V (4.89 % of the fitted
+values)**, worst 0.02660 V (11.49 %). Three currents, two parameters — one degree of freedom per x.
+
+**Result 1 — the interior minimum SURVIVES the separation.** After removing the reversible term,
+R(x) still falls to a minimum (x ≈ 0.72 in the well-behaved region) and rises again. On this
+evidence the minimum is **not** a reversible-heat artefact.
+
+**Result 2 — and the reason the first result is the only usable one.** Scaling K by ±30 %:
+
+| | ±30 % in K | verdict |
+|---|---|---|
+| ohmic term R(x) | 58–62 mΩ, band **2 %** of value | well conditioned |
+| reversible term dU/dT | −0.163 to −0.416 mV/K, band **112 %** of value | **not determined** |
+
+**A prediction of mine, refuted by the control I wrote to test it.** I argued in the module
+docstring that K-error would load onto the slope and leave the intercept well conditioned. The
+sweep shows the reverse, almost exactly proportional in K. The docstring now records the
+correction. This also means **the 4.89 % fit RMSE understates the true uncertainty**: the dominant
+error is systematic in K and leaves no trace in the residual — the same lesson as everywhere else
+in this project.
+
+**What this does and does not settle.**
+
+- Settles: the claim no longer rests on an unverifiable external run. There is local, runnable
+  code and a reported RMSE.
+- Settles: on the one multi-rate LCO test available, the entropic-artefact explanation is **not
+  supported**.
+- Does **not** settle B0005 specifically. Different cell, different ambient (44 °C against 24 °C,
+  where resistance is much higher), only 6 cycles at the 4 A leverage point, one degree of freedom
+  per fit, and a visible artefact band at x < 0.28 where coulomb normalisation across cells is
+  least reliable.
+
+**How to write it.** The interior minimum is a feature of the recovered *effective* coefficient,
+and single-rate data cannot decompose it. The one multi-rate test on the right chemistry does not
+support the entropic explanation, and the reversible term that test recovers is itself undetermined
+to better than a factor of two. Say that, and claim no more.
+
+---
+
+### G-1 (original text, retained for the record). The reversible-heat claim has no verifiable source
 **Where:** the thesis brief asks for "the reversible-heat contamination diagnosed in the Part 6
 work"; the intended supporting evidence is the Iontech LFP multi-C-rate run.
 
