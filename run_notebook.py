@@ -1,4 +1,6 @@
-"""Execute Part7_CoreValidation.ipynb top to bottom and write outputs back in.
+"""Execute a notebook top to bottom and write outputs back in.
+
+    python run_notebook.py [notebook.ipynb]
 
 This is the check that the deliverable actually runs as claimed, rather than
 being a document assembled from scripts that were each run separately.
@@ -10,7 +12,7 @@ import nbformat
 from nbclient import NotebookClient
 from nbclient.exceptions import CellExecutionError
 
-NB = "Part7_CoreValidation.ipynb"
+NB = sys.argv[1] if len(sys.argv) > 1 else "Part7_CoreValidation.ipynb"
 
 nb = nbformat.read(NB, as_version=4)
 print(f"executing {NB}: {len(nb.cells)} cells "
