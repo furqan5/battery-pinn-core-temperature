@@ -65,7 +65,11 @@ PCM_DTM = PCM_T_LIQUIDUS - PCM_T_SOLIDUS          # 4.0 K     (c)
 # a genuine 38-43 C melting range, not a pure substance.  The apparent-heat-
 # capacity dTm is therefore only partly a numerical parameter here.  Trap 5 in
 # the brief still applies to the NUMERICAL part, so DTM_SWEEP tests it.
-DTM_SWEEP = [1.0, 2.0, 4.0, 6.0, 8.0]             # K         (b)
+DTM_SWEEP = [0.25, 0.5, 1.0, 2.0, 4.0, 6.0, 8.0]  # K         (b)
+# The narrow end is not just a numerical check: it stands in for a PCM that
+# melts sharply (a salt hydrate or a pure paraffin) rather than over a 4 K
+# range.  If the identifiability collapses as dTm -> 0, then what is being
+# read is the WIDTH OF THE MELTING RANGE, not the position of the front.
 
 # Ratio k_liquid / k_solid.  1.0 = the single-value assumption of [S2];
 # 0.7-0.9 is typical of paraffins whose two phases have been measured
