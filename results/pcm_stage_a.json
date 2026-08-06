@@ -1,0 +1,251 @@
+{
+  "A1": {
+    "ahc_pointwise": {
+      "Ste": 0.24242424242424243,
+      "alpha_l": 1.3157894736842107e-07,
+      "front_rel_err_final": 0.011176156418552656,
+      "front_rel_err_max": 0.1994701666559037,
+      "profile_rmse": 0.21929088973087166,
+      "energy_closure_rel": 0.08220123534545191,
+      "converged": true
+    },
+    "ahc_chord": {
+      "Ste": 0.24242424242424243,
+      "alpha_l": 1.3157894736842107e-07,
+      "front_rel_err_final": 0.005366692890969693,
+      "front_rel_err_max": 0.00611433364734813,
+      "profile_rmse": 0.2226400250715645,
+      "energy_closure_rel": 2.5302872111839884e-10,
+      "converged": true
+    },
+    "enthalpy_newton": {
+      "Ste": 0.24242424242424243,
+      "alpha_l": 1.3157894736842107e-07,
+      "front_rel_err_final": 0.005366692996489154,
+      "front_rel_err_max": 0.00611433381833019,
+      "profile_rmse": 0.2226400240624905,
+      "energy_closure_rel": 7.872012903449217e-12,
+      "converged": true
+    }
+  },
+  "A2": {
+    "mesh": [
+      {
+        "N": 150,
+        "dx_mm": 0.39999999999999997,
+        "front_err": 0.008581719738934412,
+        "profile_rmse": 0.222670743722252
+      },
+      {
+        "N": 300,
+        "dx_mm": 0.19999999999999998,
+        "front_err": 0.00531874415367153,
+        "profile_rmse": 0.22239608569625072
+      },
+      {
+        "N": 600,
+        "dx_mm": 0.09999999999999999,
+        "front_err": 0.005366692996489154,
+        "profile_rmse": 0.2226400240624905
+      },
+      {
+        "N": 1200,
+        "dx_mm": 0.049999999999999996,
+        "front_err": 0.00536491507641673,
+        "profile_rmse": 0.22255367638724263
+      }
+    ],
+    "time": [
+      {
+        "dt": 4.0,
+        "front_err": 0.005376890667971177,
+        "profile_rmse": 0.222835119956546
+      },
+      {
+        "dt": 2.0,
+        "front_err": 0.005370079394440612,
+        "profile_rmse": 0.22270418070011042
+      },
+      {
+        "dt": 1.0,
+        "front_err": 0.005366692996489154,
+        "profile_rmse": 0.2226400240624905
+      },
+      {
+        "dt": 0.5,
+        "front_err": 0.005365003258529856,
+        "profile_rmse": 0.2226082370481713
+      }
+    ],
+    "mushy": [
+      {
+        "dTm": 4.0,
+        "front_err": 0.028116221438956035,
+        "profile_rmse": 1.7227046475420615,
+        "energy": 2.1111827736351204e-12
+      },
+      {
+        "dTm": 2.0,
+        "front_err": 0.01756076590397836,
+        "profile_rmse": 0.8758155340214143,
+        "energy": 5.7065251722735775e-12
+      },
+      {
+        "dTm": 1.0,
+        "front_err": 0.009979386927243684,
+        "profile_rmse": 0.4424315462017741,
+        "energy": 6.359888115202673e-12
+      },
+      {
+        "dTm": 0.5,
+        "front_err": 0.005366692996489154,
+        "profile_rmse": 0.2226400240624905,
+        "energy": 7.872012903449217e-12
+      },
+      {
+        "dTm": 0.25,
+        "front_err": 0.0027820761610282737,
+        "profile_rmse": 0.11164658606327074,
+        "energy": 1.0621160391337025e-11
+      },
+      {
+        "dTm": 0.1,
+        "front_err": 0.0015478901975769272,
+        "profile_rmse": 0.04485710524438078,
+        "energy": 0.0013246116874849575
+      }
+    ]
+  },
+  "A3": {
+    "E_in": 18939.645266273088,
+    "E_out": 10162.752506480227,
+    "E_stored": 8776.892759782815,
+    "residual": 1.0046278475783765e-08,
+    "closure_rel": 5.304364645980857e-13,
+    "melted_fraction": 1.0,
+    "latent_state": 4274.419548547736,
+    "latent_expect": 4274.419548547737,
+    "latent_rel_diff": 2.1277618901072435e-16,
+    "converged": true
+  },
+  "A4b": {
+    "max_dT_surf": 2.9461943995556794e-10,
+    "max_dfrac": 1.9516499527583164e-11
+  },
+  "A5": [
+    {
+      "dTm": 2.0,
+      "dt": 1.0,
+      "scheme": "ahc_pointwise",
+      "front_err": 0.019722294056991094,
+      "closure": 0.04686728476120999
+    },
+    {
+      "dTm": 2.0,
+      "dt": 1.0,
+      "scheme": "ahc_chord",
+      "front_err": 0.017560765794647593,
+      "closure": 1.711185759291269e-10
+    },
+    {
+      "dTm": 2.0,
+      "dt": 10.0,
+      "scheme": "ahc_pointwise",
+      "front_err": 0.030750898943862032,
+      "closure": 0.12281870592592305
+    },
+    {
+      "dTm": 2.0,
+      "dt": 10.0,
+      "scheme": "ahc_chord",
+      "front_err": 0.017541027387745274,
+      "closure": 9.409491835240006e-11
+    },
+    {
+      "dTm": 0.5,
+      "dt": 1.0,
+      "scheme": "ahc_pointwise",
+      "front_err": 0.011176156418552656,
+      "closure": 0.08220123534545191
+    },
+    {
+      "dTm": 0.5,
+      "dt": 1.0,
+      "scheme": "ahc_chord",
+      "front_err": 0.005366692890969693,
+      "closure": 2.5302872111839884e-10
+    },
+    {
+      "dTm": 0.5,
+      "dt": 10.0,
+      "scheme": "ahc_pointwise",
+      "front_err": 0.04516395029823481,
+      "closure": 0.21290016623930227
+    },
+    {
+      "dTm": 0.5,
+      "dt": 10.0,
+      "scheme": "ahc_chord",
+      "front_err": 0.005397594062801016,
+      "closure": 3.672094963044892e-10
+    },
+    {
+      "dTm": 0.1,
+      "dt": 1.0,
+      "scheme": "ahc_pointwise",
+      "front_err": 0.013671850231596706,
+      "closure": 0.12042944356287268
+    },
+    {
+      "dTm": 0.1,
+      "dt": 1.0,
+      "scheme": "ahc_chord",
+      "front_err": 0.0011629981107458439,
+      "closure": 4.2162273027646965e-08
+    },
+    {
+      "dTm": 0.1,
+      "dt": 10.0,
+      "scheme": "ahc_pointwise",
+      "front_err": 0.09265842646555059,
+      "closure": 0.3307941336261183
+    },
+    {
+      "dTm": 0.1,
+      "dt": 10.0,
+      "scheme": "ahc_chord",
+      "front_err": 0.0012062919434178466,
+      "closure": 1.1031096097181163e-09
+    }
+  ],
+  "verdict": {
+    "pass": true,
+    "checks": [
+      [
+        "Stefan front position, chord AHC",
+        true,
+        "0.537% (tol 1%)"
+      ],
+      [
+        "Stefan front position, enthalpy Newton",
+        true,
+        "0.537% (tol 1%)"
+      ],
+      [
+        "Global energy closure, battery config",
+        true,
+        "5.30e-13 (tol 1e-10)"
+      ],
+      [
+        "Latent == melted mass * L_f",
+        true,
+        "2.13e-16 (tol 1e-10)"
+      ],
+      [
+        "AHC vs enthalpy agreement",
+        true,
+        "2.95e-10 K (tol 1e-6)"
+      ]
+    ]
+  }
+}
