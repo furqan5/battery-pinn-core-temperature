@@ -1,0 +1,31 @@
+﻿
+==========================================================================================
+EXECUTING Part3_CRLB_Classical_Inverse.ipynb: 49 cells (24 code)
+==========================================================================================
+python : C:\Users\Nouman\AppData\Roaming\Python\Python314\site-packages\zmq\_future.py:718: RuntimeWarning: Proactor 
+event loop does not implement add_reader family of methods required for zmq. Registering an additional selector thread 
+for add_reader support via tornado. Use `asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())` to avoid 
+this warning.
+At line:1 char:369
++ ... Furqan's Docs\battery_pinn"; python -u verify_parts36.py 2>&1 | Tee-O ...
++                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\Nouman...d this warning.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  self._get_loop()
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) 
+is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned 
+CurveZMQ keys to enable transport encryption.
+
+  109 s | 24/24 code cells produced output | 0 cells errored
+  wrote C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn\verify\Part3_CRLB_Classical_Inverse_executed.ipynb
+
+==========================================================================================
+EXECUTING Part6_Real_Data_PINN.ipynb: 18 cells (9 code)
+==========================================================================================
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) 
+is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned 
+CurveZMQ keys to enable transport encryption.
+
+  1781 s | 8/9 code cells produced output | 0 cells errored
+  wrote C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn\verify\Part6_Real_Data_PINN_executed.ipynb

@@ -300,9 +300,50 @@ baseline.
 
 ---
 
-## 5. Part 6 — inverse PINN on real data (tier V2)
+## 5. Part 6 — inverse PINN on real data (tier V2 → **partially V1, with a caveat**)
 
-The missing-I(t)² story.
+### 5.0 Re-execution outcome — 6 Aug 2026
+
+Executed in this repository: **9 code cells, 0 errors, 1781 s**
+(`verify/Part6_Real_Data_PINN_executed.ipynb`). Both residual variants are present in the archived
+notebook — the broken one at cell 6 (`mult = 1 + c1·x + c2·x²`) and the corrected one at cell 14
+(`mult = (1 + c1·x + c2·x²)·Ir²`) — so the fix *is* in the artifact, not only in the prose.
+
+**The qualitative conclusion reproduces. The quoted parameter value does not.**
+
+| Variant | R₀ (mΩ) | c₁ | c₂ | RMSE (K) | Lr | bow ratio |
+|---|---|---|---|---|---|---|
+| **re-executed, fixed, w = 20** | **152.83** | −1.532 | 2.141 | 0.1269 | 2.012×10⁻³ | 0.74 |
+| *prose, fixed, w = 20* | *144.78* | *−1.232* | *+1.845* | *0.1402* | *8.56×10⁻³* | *0.73* |
+| **re-executed, fixed, w = 200** | **149.06** | −1.416 | 2.040 | 0.0704 | 5.486×10⁻³ | 0.86 |
+| *prose, fixed, w = 200* | *149.48* | *−1.441* | *+2.069* | *0.0713* | *5.48×10⁻³* | *0.86* |
+| re-executed, broken, w = 20 | 143.86 | +0.023 | 0.430 | 0.6157 | 2.749×10⁻³ | 1.11 |
+| cycle-0 classical target | 144.35 | −1.305 | 1.934 | 0.1297 | — | — |
+
+**Reproduces robustly:** the defect diagnosis. Without the current factor c₁ sits at +0.023 — the
+wrong sign — and RMSE is 0.62 K; with it, c₁ is firmly negative and RMSE falls to ~0.13 K. The
+w = 200 row matches the prose to 0.3 %.
+
+**Does not reproduce:** the headline parameter at w = 20. A fresh run returns **152.83 mΩ**, which
+against the cycle-0 classical of 144.35 mΩ is **+5.87 %**, not the +0.30 % quoted. Note the fresh
+run has *better* physics (Lr 2.0×10⁻³ against 8.6×10⁻³) while sitting further from the classical
+value — the same failure mode Part 5b documented, where the truth-free selection criterion cannot
+distinguish a good run from a badly-parameterised one.
+
+> ⚠ **Consequence for the prediction ledger.** Part 6 scores **G2** ("R₀ within ±3 % of classical")
+> as a **HIT** at +0.30 %. On the re-executed run it is **+5.87 %, a MISS**. The verdict depends on
+> which training run is taken, and no seed spread was ever reported for this fit.
+>
+> **Recommendation for the thesis:** quote Part 6's R₀ as a range across runs, not to five
+> significant figures, and either re-score G2 as indeterminate or run the 5+ seeds that the
+> project's own methodology requires elsewhere. `[VERIFY: seed spread for the Part 6 fixed-residual
+> fit at w = 20 — currently n = 1 in the notebook and n = 1 here, and they disagree by 5.6 %]`
+
+This is not a defect in the Part 6 argument, which is about a residual defect and survives intact.
+It is a defect in the *precision* with which a single stochastic fit was reported, and it is
+exactly the kind of thing re-execution exists to catch.
+
+### 5.1 The missing-I(t)² story
 
 | Variant | R₀ | c₁ | c₂ | R_end | x_min | RMSE | bow ratio |
 |---|---|---|---|---|---|---|---|
