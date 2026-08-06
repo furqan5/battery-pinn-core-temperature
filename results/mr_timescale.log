@@ -1,0 +1,24 @@
+﻿============================================================================================================
+MULTI-RATE TIMESCALE TEST — A123 26650 LFP, 25 degC chamber
+============================================================================================================
+  tau_diff = R^2/alpha = 1017 s   (k = 0.404 W/m/K, rho*cp = 2.469e+06 J/m^3/K, both (b) from Part 7)
+  h fitted per record from its own cooling tail; no Part 7 fixture assumed.
+
+       C    t_dis   t/tau       h     Bi tau_cool    R_eff  surfRMSE   rise   grad   QS err
+                s           W/m2K               s     mOhm         K      K      K        %
+  ----------------------------------------------------------------------------------------------------
+    0.05    74047   72.82   22.33  0.713      713  1000.00    0.2314   0.13   0.05     0.31
+    1.00     3668    3.61   29.67  0.948      537    14.76    0.3381   0.58   0.28     1.91
+    2.00     1819    1.79   32.54  1.039      489    23.95    0.4400   3.31   1.71     3.36
+    3.00     1205    1.19   28.65  0.915      556    15.58    0.4091   4.77   2.14     5.70
+    5.00      724    0.71   39.37  1.257      404    14.29    0.8431   7.93   4.75    10.61
+   10.00      360    0.35   39.42  1.259      404    11.03    1.0750  16.34   8.88    25.82
+   15.00      238    0.23   39.40  1.258      404     9.41    1.3650  23.40  11.44    42.83
+   20.00      173    0.17   34.18  1.092      466     9.15    1.6251  32.85  12.35    63.01
+
+  Reading: QS err is the error of the quasi-steady relation against the
+  transient solution, over the thermally active window. If the criterion
+  is right it should be small when t_dis >> tau_diff and grow as the
+  ratio falls through 1.
+
+  saved results/mr_timescale.npz

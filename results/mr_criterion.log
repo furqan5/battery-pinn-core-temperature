@@ -1,0 +1,26 @@
+﻿========================================================================================
+CRITERION — quasi-steady error against forcing/diffusion timescale ratio
+========================================================================================
+   C-rate  t_dis/tau_diff  QS error %
+      1.0            3.61        1.91
+      2.0            1.79        3.36
+      3.0            1.19        5.70
+      5.0            0.71       10.61
+     10.0            0.35       25.82
+     15.0            0.23       42.83
+     20.0            0.17       63.01
+
+  power-law fit: QS error % = 7.48 * (t/tau)^(-1.180)
+  r^2 = 0.9957
+  QS error =   2.0 %  at  t_dis/tau_diff = 3.49
+  QS error =   5.0 %  at  t_dis/tau_diff = 1.37
+  QS error =  10.0 %  at  t_dis/tau_diff = 0.77
+  QS error =  25.0 %  at  t_dis/tau_diff = 0.37
+
+  Part 7 drive cycle: t/tau = 3.40, measured QS error = 2.72 %
+  criterion predicts 1.77 % pure approximation error at that ratio.
+  Part 7's figure is larger because it is scored against a REAL core and
+  therefore also carries model-form and sensor error, not only the
+  quasi-steady approximation. The ordering is the right way round.
+
+  wrote figures/timescale_criterion.png

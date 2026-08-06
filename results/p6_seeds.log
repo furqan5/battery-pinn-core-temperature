@@ -1,0 +1,15 @@
+﻿executing setup + 6 seeds x 2 weights
+python : C:\Users\Nouman\AppData\Roaming\Python\Python314\site-packages\zmq\_future.py:718: RuntimeWarning: Proactor 
+event loop does not implement add_reader family of methods required for zmq. Registering an additional selector thread 
+for add_reader support via tornado. Use `asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())` to avoid 
+this warning.
+At line:1 char:369
++ ... qan's Docs\battery_pinn"; python -u p6_seeds.py 6 20,200 2>&1 | Tee-O ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\Nouman...d this warning.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  self._get_loop()
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) 
+is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned 
+CurveZMQ keys to enable transport encryption.
