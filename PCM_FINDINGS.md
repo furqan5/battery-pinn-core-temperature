@@ -209,13 +209,14 @@ looks entirely plausible throughout; only the energy closure catches it.
 | Latent buffer | 4274 J (25.9 g RT42) | |
 | Melt duration at 3C-equivalent | 5618 s | |
 
-Cell: HAKADI/Selian 26700 sodium-ion, 3.5 Ah, 84.2 g, ≤20 mΩ at 1 kHz
-(Kubitza et al., *J. Power Sources Advances* 2024). PCM: Rubitherm RT42,
-L_f 165 kJ/kg, 311.5–315.5 K melting range, k 0.2 W/m·K, c_p 2000 J/kg·K
-(Hammoodi et al., PMC12379284; Rubitherm datasheet). Cell radial conductivity
-from Bhundiya, Hunt & Drolen, TFAWS 2018 (0.43 ± 0.07 W/m·K for 18650 Li-ion,
-transferred to Na-ion — tagged as an estimate). Full provenance tags in
-`pcm_params.py`.
+Cell: HAKADI/Selian 26700 sodium-ion, 3.5 Ah, 84.2 g, ≤20 mΩ at 1 kHz — Bischof
+et al., *Journal of Power Sources Advances* **27** (2024) 100148. PCM: Rubitherm
+RT42, L_f 165 kJ/kg, 311.5–315.5 K melting range, k 0.2 W/m·K, c_p 2000 J/kg·K —
+Hammoodi et al., *Scientific Reports* **15** (2025) 31308, Table 1, cross-checked
+against the Rubitherm RT product table (42 °C, 165 kJ/kg). Cell radial
+conductivity from Bhundiya, Hunt & Drolen, TFAWS 2018 (0.43 ± 0.07 W/m·K for
+18650 Li-ion, transferred to Na-ion — tagged as an estimate). Full provenance
+tags in `pcm_params.py`.
 
 **Two provenance points that cut against the result being too pessimistic:**
 

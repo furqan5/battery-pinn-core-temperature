@@ -14,13 +14,16 @@ SOURCES
 [S1] Rubitherm Technologies GmbH, RT product range table.
      https://www.rubitherm.eu/en/productcategory/organische-pcm-rt
      RT42: melting area 42 C, heat storage capacity 165 kJ/kg.
-[S2] Hammoodi et al., "CFD simulation of air layer effects on RT42 PCM melting
-     in a square cell", PMC12379284, Table 1.
+[S2] Hammoodi, Abbas, Askar, Alomari, Hassan, Hussein, Khalaf, Flayyih &
+     Kadhim, "CFD simulation of air layer effects on RT42 PCM melting in a
+     square cell", Scientific Reports 15 (2025) 31308,
+     doi:10.1038/s41598-025-16573-6, Table 1.
      rho 760 kg/m3, k 0.2 W/mK, cp 2000 J/kgK, L_f 165000 J/kg,
      melting range 311.5-315.5 K.
-[S3] Kubitza et al., "Evaluation of commercial 18650 and 26700 sodium-ion cells
-     and comparison with well-established lithium-ion cells",
-     J. Power Sources Advances (2024), S2666248524000143 / KIT 1000171390.
+[S3] Bischof, Marangon, Kasper, Aracil Regalado, Wohlfahrt-Mehrens, Hoelzle,
+     Bresser & Waldmann, "Evaluation of commercial 18650 and 26700 sodium-ion
+     cells and comparison with well-established lithium-ion cells",
+     Journal of Power Sources Advances 27 (2024) 100148, open access CC BY.
      26700 Na-ion (HAKADI / Selian Energy): 3.5 Ah, 84.2 g, <=20 mOhm at 1 kHz,
      1.5-4.1 V, max 3C discharge, tested at 25 C.
      18650 Na-ion: 1.5 Ah, 37.4 g, 18.6 mOhm at 1 kHz.
