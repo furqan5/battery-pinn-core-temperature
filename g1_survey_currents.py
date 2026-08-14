@@ -15,8 +15,7 @@ import os
 import numpy as np
 from scipy.io import loadmat
 
-ROOT = (r"C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn\Data_Sets"
-        r"\Li-ion Battery Dataset from NASA PCoE")
+from paths import NASA_ROOT as ROOT  # resolved at import, not hardcoded
 
 files = sorted(glob.glob(os.path.join(ROOT, "**", "B*.mat"), recursive=True))
 print(f"{len(files)} .mat files found\n")

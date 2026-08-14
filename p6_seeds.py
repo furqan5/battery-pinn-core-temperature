@@ -23,7 +23,8 @@ import time
 import nbformat
 from nbclient import NotebookClient
 
-REPO = r"C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn"
+from paths import REPO  # resolved at import, not hardcoded
+
 SRC = os.path.join(REPO, "verify", "Part6_Real_Data_PINN_executed.ipynb")
 N_SEEDS = int(sys.argv[1]) if len(sys.argv) > 1 else 6
 WEIGHTS = [float(w) for w in (sys.argv[2].split(",") if len(sys.argv) > 2

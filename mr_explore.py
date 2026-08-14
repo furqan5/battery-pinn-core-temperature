@@ -16,8 +16,18 @@ import re
 import numpy as np
 import pandas as pd
 
-BASE = (r"C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn\Data_Sets"
-        r"\kxsbr4x3j2-2\galvanostatic_discharge_test")
+#: Root of the Catenaro & Onori galvanostatic discharge set
+#: (Mendeley Data, doi:10.17632/kxsbr4x3j2.1). Not redistributed with this
+#: repository -- see DATA.md for how to obtain it.
+#:
+#: Override with the BATTERY_PINN_DATA environment variable, which should point
+#: at the directory containing `kxsbr4x3j2-2`. Defaults to `Data_Sets/` beside
+#: this file, which is where DATA.md tells you to unpack it.
+_DATA_ROOT = os.environ.get(
+    "BATTERY_PINN_DATA",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "Data_Sets"),
+)
+BASE = os.path.join(_DATA_ROOT, "kxsbr4x3j2-2", "galvanostatic_discharge_test")
 
 CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results",
                      "mr_cache")

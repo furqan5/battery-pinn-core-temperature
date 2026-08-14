@@ -17,9 +17,9 @@ import time
 import nbformat
 from nbclient import NotebookClient
 
-REPO = r"C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn"
-SRC = os.path.join(REPO, "CoreField_Battery_Package_v1.0",
-                   "CoreField_Battery_Package_v1.0", "notebooks")
+from paths import COREFIELD_ROOT, REPO  # resolved at import, not hardcoded
+
+SRC = os.path.join(COREFIELD_ROOT, "notebooks")
 OUT = os.path.join(REPO, "verify")
 os.makedirs(OUT, exist_ok=True)
 

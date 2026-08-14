@@ -1,13 +1,22 @@
-# Raw datasets: large binaries, redistributed under their own licences.
-# They live on disk beside the repo but are not tracked.
+# Raw datasets: large binaries under their own licences. See DATA.md -- they are
+# never committed, and the repository does not redistribute measurement data.
 Data_Sets/
+*.zip
 
 # Prior-work package (read-only reference, tracked separately)
 CoreField_Battery_Package_v1.0/
 
+# Cached raw time series regenerated from the Catenaro/Onori set on first run.
+# Deliberately excluded: this is source measurement data, not analysis output.
+results/mr_cache/
+
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+
+# Private collaboration material -- must never enter this branch
+*.pptx
+DECK_CHANGES*.md
 
 # Regenerable outputs
 figures/*.png

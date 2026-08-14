@@ -1,0 +1,52 @@
+This repository is released under two licences.
+
+================================================================================
+SOFTWARE — MIT License
+================================================================================
+Applies to all source code: every .py file, and the code cells of every
+.ipynb notebook.
+
+Copyright (c) 2026 Furqan Shakeel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+DOCUMENTATION, FIGURES AND RESULTS — CC BY 4.0
+================================================================================
+Applies to all Markdown documents (FINDINGS.md, PCM_FINDINGS.md, GAPS.md,
+results_inventory.md, PREDICTIONS files, thesis/), all generated figures, all
+files under results/, the LaTeX sources under paper/ and paper2/, and the prose
+cells of the notebooks.
+
+Creative Commons Attribution 4.0 International (CC BY 4.0).
+Full text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+You may share and adapt this material for any purpose, including commercially,
+provided you give appropriate credit, link to the licence, and indicate whether
+changes were made.
+
+================================================================================
+THIRD-PARTY DATA — NOT COVERED BY EITHER LICENCE ABOVE
+================================================================================
+No measurement data is redistributed in this repository. The experimental
+datasets used are the property of their original authors and remain under their
+own terms. See DATA.md for what is required, where to obtain it, and how to
+cite it. Derived quantities committed here (fitted coefficients in
+nasa_*_fits.csv, summary JSON and logs under results/) are outputs of the
+analysis and fall under CC BY 4.0 above; they are not the source measurements.

@@ -10,8 +10,8 @@ import os
 import numpy as np
 from scipy.io import loadmat
 
-ROOT = (r"C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn\Data_Sets"
-        r"\Li-ion Battery Dataset from NASA PCoE")
+from paths import NASA_ROOT as ROOT  # resolved at import, not hardcoded
+
 CELLS = ["B0038", "B0039", "B0040", "B0042", "B0043", "B0044"]
 
 

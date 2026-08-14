@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+title: >-
+  Core temperature estimation in a cylindrical lithium-ion cell: analysis code,
+  identifiability study, and scored predictions
+message: >-
+  If you use this software or its results, please cite it. If you use the
+  experimental datasets it analyses, cite those separately -- see DATA.md.
+type: software
+authors:
+  - given-names: Furqan
+    family-names: Shakeel
+    email: furqanshakeel5@outlook.com
+    affiliation: >-
+      Institute of Energy and Environmental Engineering, University of the
+      Punjab, Lahore, Pakistan
+    # orcid: 'https://orcid.org/0000-0000-0000-0000'   # TODO: add before release
+repository-code: 'https://github.com/furqan5/battery-pinn-core-temperature'
+abstract: >-
+  Inverse estimation of internal lithium-ion cell state from a single external
+  temperature channel, validated against a measured core thermocouple. Three
+  estimators are compared on identical information: a transient finite-volume
+  inverse, an inverse physics-informed neural network, and a one-line
+  quasi-steady algebraic relation. The algebraic relation is the most accurate
+  at 0.141 K core RMSE against gradients peaking at 6.54 K, and the neural
+  estimator is the worst of the three; the repository reports that negative
+  result as its headline. A companion phase-change study finds the remaining
+  latent buffer identifiable to 0.1 percent of capacity from one surface sensor
+  while the melt-front position is not identifiable at any heating rate tested.
+  Includes Cramer-Rao identifiability analysis performed before fitting,
+  pre-registered predictions scored with misses reported, solver verification
+  against closed-form solutions, and a leak audit.
+keywords:
+  - lithium-ion battery
+  - core temperature estimation
+  - inverse problems
+  - physics-informed neural networks
+  - identifiability
+  - Cramer-Rao bound
+  - phase change material
+  - negative results
+license: MIT
+license-url: 'https://github.com/furqan5/battery-pinn-core-temperature/blob/public/LICENSE'

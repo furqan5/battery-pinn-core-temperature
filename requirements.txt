@@ -1,0 +1,20 @@
+# Verified against the versions actually used, 2026-08-15.
+# Python 3.14.6. Lower bounds are what the code needs; the pinned comment is
+# what it was last run on.
+
+numpy>=1.24          # run on 2.4.6
+scipy>=1.10          # run on 1.18.0
+pandas>=2.0          # run on 2.3.3  -- xlsx reading for the multi-rate set
+matplotlib>=3.7      # run on 3.11.1
+torch>=2.0           # run on 2.13.0+cpu -- CPU only, no GPU required
+
+# Reading the Catenaro/Onori .xlsx files
+openpyxl>=3.1
+
+# Only needed to rebuild the notebooks from the builder scripts
+# (build_notebook.py, build_pcm_notebook.py, run_notebook.py)
+nbformat>=5.9
+nbclient>=0.8
+ipython>=8.0
+
+# Not required: scikit-learn is not used anywhere in this repository.

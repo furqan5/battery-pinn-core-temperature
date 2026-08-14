@@ -53,8 +53,7 @@ import numpy as np
 from scipy.io import loadmat
 from scipy.optimize import curve_fit
 
-ROOT = (r"C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn\Data_Sets"
-        r"\Li-ion Battery Dataset from NASA PCoE")
+from paths import NASA_ROOT as ROOT  # resolved at import, not hardcoded
 
 # Part-2/3 locked thermal constants for this 18650 (b)
 RHO_CP = 2500.0 * 1100.0

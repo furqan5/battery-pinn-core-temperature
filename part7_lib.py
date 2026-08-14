@@ -24,15 +24,22 @@ import scipy.linalg as sla
 # Paths
 # --------------------------------------------------------------------------- #
 
-REPO = r"C:\Users\Nouman\Desktop\Furqan's Docs\battery_pinn"
+import os
 
-_RH = (REPO + r"\Data_Sets\EKF-Battery-Impedance-Temperature-master"
-              r"\EKF-Battery-Impedance-Temperature-master"
-              r"\Temperature Estimation using Impedance with Matlab - Github\Data"
-              r"\MainScriptData")
+from paths import DATA_ROOT, REPO  # resolved at import, not hardcoded
 
-_UM = (REPO + r"\Data_Sets\Battery Electrothermal Model-1"
-              r"\Battery Electrothermal Model")
+_RH = os.path.join(
+    DATA_ROOT,
+    "EKF-Battery-Impedance-Temperature-master",
+    "EKF-Battery-Impedance-Temperature-master",
+    "Temperature Estimation using Impedance with Matlab - Github",
+    "Data",
+    "MainScriptData",
+)
+
+_UM = os.path.join(
+    DATA_ROOT, "Battery Electrothermal Model-1", "Battery Electrothermal Model"
+)
 
 
 # --------------------------------------------------------------------------- #
