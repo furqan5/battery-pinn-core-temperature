@@ -18,8 +18,9 @@ __pycache__/
 *.pptx
 DECK_CHANGES*.md
 
-# Regenerable outputs
-figures/*.png
+# Regenerable outputs. Figures ARE committed: they are the analysis output the
+# documents reference, and a repository whose README shows nothing is not a
+# repository anyone reads.
 results/*.npz
 
 # Manuscript sources, held until the author list is final. Remove these two

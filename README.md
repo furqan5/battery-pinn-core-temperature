@@ -10,6 +10,16 @@ to do it is the worst of the three methods tried. One line of algebra beats it b
 4.4×.** That negative result is the most useful thing in the repository and it is
 reported as the headline rather than a footnote.
 
+![Internal temperature reconstructed from surface data alone. Black is the
+measured core thermocouple, held out from every fit. Blue is the measured
+surface — the only input. Red is the neural estimator's prediction.
+](figures/core_validation.png)
+
+*The blue trace is all the estimator sees. The black trace is what it has to
+predict, and it never sees it. The gap between them peaks at 6.54 K. Shown here
+is the neural estimator at 0.614 K RMSE; the one-line algebraic relation reaches
+0.141 K on the same data, which is the finding.*
+
 ---
 
 ## The two manuscripts
