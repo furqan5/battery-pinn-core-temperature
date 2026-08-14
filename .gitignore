@@ -21,3 +21,8 @@ DECK_CHANGES*.md
 # Regenerable outputs
 figures/*.png
 results/*.npz
+
+# Manuscript sources, held until the author list is final. Remove these two
+# lines when adding them.
+paper/
+paper2/

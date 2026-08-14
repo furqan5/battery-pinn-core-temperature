@@ -14,13 +14,17 @@ reported as the headline rather than a footnote.
 
 ## The two manuscripts
 
-| | Subject | Source |
-|---|---|---|
-| **Paper 1** | Core temperature estimation validated against an internal thermocouple, and a timescale criterion for when a transient inverse solver is warranted | `paper/main.tex` |
-| **Paper 2** | Identifiability-gated inverse estimation of heat generation from one surface channel — Cramér–Rao bounds computed *before* fitting | `paper2/main.tex` |
+| | Subject |
+|---|---|
+| **Paper 1** | Core temperature estimation validated against an internal thermocouple, and a timescale criterion for when a transient inverse solver is warranted |
+| **Paper 2** | Identifiability-gated inverse estimation of heat generation from one surface channel — Cramér–Rao bounds computed *before* fitting |
 
 Both target IEEE Transactions on Instrumentation and Measurement. See
-`PUBLICATION_PLAN.md`.
+`PUBLICATION_PLAN.md` for the venue analysis.
+
+**The manuscript sources are not in this repository yet**, and are held until the
+author list is final. LaTeX sources and compiled PDFs will be added then.
+Everything needed to reproduce every number they report is already here.
 
 ---
 
@@ -114,10 +118,9 @@ The documents are the deliverable as much as the code is.
   closed it, including one claim that was **dropped** because its supporting run
   could not be verified (G-1).
 - **`results_inventory.md`** — claim-to-file provenance map.
-- **`PREDICTIONS`-style files** (`PCM_PREDICTIONS.md`) — registered before the
-  corresponding results existed. The git history is the evidence: commit
-  `868b4ef` registers Q1–Q6 and precedes `62cbedb`, which produces the first
-  Stage B number.
+- **`PCM_PREDICTIONS.md`** — registered before the corresponding results existed.
+  The git history is the evidence: commit `101bf7a` registers Q1–Q6 and precedes
+  `e1d2b02`, which produces the first Stage B number, both dated 2026-08-06.
 - **`thesis/ch6_validation.md`** — longer-form validation chapter.
 
 ## Methodological commitments
@@ -173,11 +176,24 @@ them. Their authors did the expensive part.
 MIT for code, CC BY 4.0 for documents, figures and results. No third-party
 measurement data is redistributed. See `LICENSE` and `DATA.md`.
 
-## A note on this branch
+## What this repository is an export of
 
-This is the public release branch. It is cut from the project history at the last
-commit containing no private collaboration material, so the commit hashes cited
-in `PCM_FINDINGS.md` remain valid and the pre-registration ordering is verifiable
-here. Unpublished proposal material for a third-party collaboration is not
-included, and the raw multi-rate cache under `results/mr_cache/` was removed
-because it is source measurement data rather than analysis output.
+This is a filtered export of a private working repository. All 29 commits, their
+messages, authors and dates are preserved, so the pre-registration ordering is
+verifiable here. Commit **hashes differ** from the private original because the
+export was filtered; `PCM_FINDINGS.md` carries a note on that.
+
+Four things were removed or held back, each for a stated reason:
+
+- **Unpublished proposal material** for a third-party collaboration. Not mine to
+  publish.
+- **`results/mr_cache/*.npz`** — the raw Catenaro & Onori time series. Source
+  measurement data rather than analysis output, and it regenerates on first run.
+- **The manuscript sources** under `paper/` and `paper2/`, held until the author
+  list is final.
+- **Absolute developer paths**, replaced by `paths.py`. Seven files carried a
+  hardcoded path that made them unrunnable anywhere else.
+
+Author identity was also consolidated. Some commits were made on a machine whose
+git config carried a family member's identity; all 29 are my own work and are now
+attributed accordingly.

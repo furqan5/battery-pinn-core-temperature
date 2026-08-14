@@ -86,7 +86,13 @@ at the meeting without the caveat.**
 ## 2. Pre-registered predictions, scored
 
 Registered in `PCM_PREDICTIONS.md`, committed before any Stage B number existed
-(git `868b4ef`, ahead of results commit `62cbedb`). **Three hits, three misses.**
+(git `101bf7a`, ahead of results commit `e1d2b02`, both dated 2026-08-06).
+**Three hits, three misses.**
+
+*Hash note:* this public repository is a filtered export of the private working
+repository, so hashes differ from the originals (`868b4ef` and `62cbedb` there).
+Commit order, messages and dates are unchanged, and those are what carry the
+claim — the registration commit precedes the first result commit.
 
 | # | Prediction | Threshold | Actual | |
 |---|---|---|---|---|

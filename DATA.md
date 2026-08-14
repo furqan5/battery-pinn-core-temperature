@@ -13,7 +13,7 @@ gitignored.
 ## 1. A123 26650 LFP cell with an internal core thermocouple
 
 **Used by:** Part 7 core-temperature validation (`part7_lib.py`, `stage_*.py`,
-`Part7_CoreValidation.ipynb`), and `paper/` throughout.
+`Part7_CoreValidation.ipynb`), and paper 1.
 
 This is the dataset the whole project exists to test against — surface *and*
 measured core temperature on the same cell, over two drive cycles.
@@ -61,14 +61,14 @@ the `BATTERY_PINN_DATA` environment variable, or edit `BASE` directly.
 ## 3. NASA Ames battery ageing set (cell B0005)
 
 **Used by:** the CRLB-gated heat-generation recovery over 168 discharge cycles
-(`verify/Part3_*.ipynb`, `nasa_*_fits.csv`), and `paper2/` throughout.
+(`verify/Part3_*.ipynb`, `nasa_*_fits.csv`), and paper 2.
 
 > B. Saha and K. Goebel, "Battery data set," NASA Ames Prognostics Data
 > Repository, NASA Ames Research Center, Moffett Field, CA, USA, 2007.
 
 Unpack to `Data_Sets/Li-ion Battery Dataset from NASA PCoE/`.
 
-One provenance note that matters for reading `paper2/`: the `.mat` mirror carries
+One provenance note that matters for reading paper 2: the `.mat` mirror carries
 no `metadata.csv`, so the cycles **cannot** be stratified by ambient temperature.
 The set analysed is *all 168 discharge cycles in `B0005.mat`*, not an
 ambient-selected subset. The manuscript describes it that way. See G-6 in

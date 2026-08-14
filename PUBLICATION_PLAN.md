@@ -3,6 +3,11 @@
 Verified 2026-08-15. Supersedes the cost section of `paper/SUBMISSION_NOTES.md`,
 whose figures came from IEEE's 2020 schedule.
 
+> **On the file paths below.** The manuscript sources (`paper/`, `paper2/` and
+> `paper/SUBMISSION_NOTES.md`) are not in this public repository yet — they are
+> held until the author list is final. Paths are kept so the plan stays readable,
+> and the files will appear at them when the manuscripts are added.
+
 ---
 
 ## 1. The filter rule that answers "no fee at all"
