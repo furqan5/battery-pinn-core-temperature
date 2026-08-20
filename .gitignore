@@ -23,7 +23,8 @@ DECK_CHANGES*.md
 # repository anyone reads.
 results/*.npz
 
-# Manuscript sources, held until the author list is final. Remove these two
-# lines when adding them.
+# Manuscripts stay out of the public repository. This is a code release.
 paper/
 paper2/
+SUBMISSION_PACKAGE.md
+PUBLICATION_PLAN.md

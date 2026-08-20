@@ -29,12 +29,8 @@ is the neural estimator at 0.614 K RMSE; the one-line algebraic relation reaches
 | **Paper 1** | Core temperature estimation validated against an internal thermocouple, and a timescale criterion for when a transient inverse solver is warranted |
 | **Paper 2** | Identifiability-gated inverse estimation of heat generation from one surface channel — Cramér–Rao bounds computed *before* fitting |
 
-Both target IEEE Transactions on Instrumentation and Measurement. See
-`PUBLICATION_PLAN.md` for the venue analysis.
-
-**The manuscript sources are not in this repository yet**, and are held until the
-author list is final. LaTeX sources and compiled PDFs will be added then.
-Everything needed to reproduce every number they report is already here.
+**The manuscripts themselves are not in this repository — this is a code
+release.** Everything needed to reproduce every number they report is here.
 
 ---
 
@@ -199,10 +195,10 @@ Four things were removed or held back, each for a stated reason:
   publish.
 - **`results/mr_cache/*.npz`** — the raw Catenaro & Onori time series. Source
   measurement data rather than analysis output, and it regenerates on first run.
-- **The manuscript sources** under `paper/` and `paper2/`, held until the author
-  list is final.
 - **Absolute developer paths**, replaced by `paths.py`. Seven files carried a
   hardcoded path that made them unrunnable anywhere else.
+- **The manuscripts.** This repository is the code and the research record; the
+  papers are published through the journal, not here.
 
 Author identity was also consolidated. Some commits were made on a machine whose
 git config carried a family member's identity; all 29 are my own work and are now

@@ -9,7 +9,13 @@ type: software
 authors:
   - given-names: Furqan
     family-names: Shakeel
-    email: furqanshakeel5@outlook.com
+    email: furqanshakeel03331494506@gmail.com
+    affiliation: >-
+      Institute of Energy and Environmental Engineering, University of the
+      Punjab, Lahore, Pakistan
+    # orcid: 'https://orcid.org/0000-0000-0000-0000'   # TODO: add before release
+  - given-names: Syed Sheraz
+    family-names: Daood
     affiliation: >-
       Institute of Energy and Environmental Engineering, University of the
       Punjab, Lahore, Pakistan
