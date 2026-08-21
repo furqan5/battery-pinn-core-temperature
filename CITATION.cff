@@ -20,7 +20,8 @@ authors:
       Institute of Energy and Environmental Engineering, University of the
       Punjab, Lahore, Pakistan
     # orcid: 'https://orcid.org/0000-0000-0000-0000'   # TODO: add before release
-repository-code: 'https://github.com/furqan5/battery-pinn-core-temperature'
+doi: 10.5281/zenodo.22043513
+repository-code: 'https://github.com/furqan5/ion-battery-pinn-core-temperature'
 abstract: >-
   Inverse estimation of internal lithium-ion cell state from a single external
   temperature channel, validated against a measured core thermocouple. Three
@@ -45,4 +46,6 @@ keywords:
   - phase change material
   - negative results
 license: MIT
-license-url: 'https://github.com/furqan5/battery-pinn-core-temperature/blob/main/LICENSE'
+license-url: 'https://github.com/furqan5/ion-battery-pinn-core-temperature/blob/main/LICENSE'
+version: v1.0.0
+date-released: '2026-08-21'
