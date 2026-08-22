@@ -1,5 +1,10 @@
 # Core temperature from the outside of a lithium-ion cell — and when the machinery is worth it
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22043513.svg)](https://doi.org/10.5281/zenodo.22043513)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
+[![Tests 24/24](https://img.shields.io/badge/verification-24%2F24%20passing-brightgreen.svg)](tests_fd.py)
+
 Analysis code and results for two manuscripts on inverse estimation of internal
 cell state from a single external temperature channel.
 

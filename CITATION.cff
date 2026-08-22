@@ -10,16 +10,16 @@ authors:
   - given-names: Furqan
     family-names: Shakeel
     email: furqanshakeel@engineer.com
+    orcid: 'https://orcid.org/0009-0004-7819-2492'
     affiliation: >-
       Institute of Energy and Environmental Engineering, University of the
       Punjab, Lahore, Pakistan
-    # orcid: 'https://orcid.org/0000-0000-0000-0000'   # TODO: add before release
   - given-names: Syed Sheraz
     family-names: Daood
     affiliation: >-
       Institute of Energy and Environmental Engineering, University of the
       Punjab, Lahore, Pakistan
-    # orcid: 'https://orcid.org/0000-0000-0000-0000'   # TODO: add before release
+    # orcid: pending -- add when Dr Daood's iD is available
 doi: 10.5281/zenodo.22043513
 repository-code: 'https://github.com/furqan5/ion-battery-pinn-core-temperature'
 abstract: >-
