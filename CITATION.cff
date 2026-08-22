@@ -16,10 +16,10 @@ authors:
       Punjab, Lahore, Pakistan
   - given-names: Syed Sheraz
     family-names: Daood
+    orcid: 'https://orcid.org/0000-0002-4580-2504'
     affiliation: >-
       Institute of Energy and Environmental Engineering, University of the
       Punjab, Lahore, Pakistan
-    # orcid: pending -- add when Dr Daood's iD is available
 doi: 10.5281/zenodo.22043513
 repository-code: 'https://github.com/furqan5/ion-battery-pinn-core-temperature'
 abstract: >-
